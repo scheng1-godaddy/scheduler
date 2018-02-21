@@ -8,8 +8,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import shawn_cheng.view_controller.*;
 import static javafx.application.Application.launch;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 /**
  * This is the main class for the inventory app. 
@@ -44,6 +42,7 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Maddy's Scheduling App");
         initMainLayout();
+
     }
 
     /**
@@ -63,6 +62,7 @@ public class MainApp extends Application {
             System.out.println("Displaying main screen");
         } catch (IOException e) {
             e.printStackTrace();
+
         }
     }
 
@@ -72,7 +72,6 @@ public class MainApp extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-        System.out.println("Testing Git Hub");
     }
 }
 
