@@ -71,10 +71,8 @@ public class MainApp extends Application {
      * @param args 
      */
     public static void main(String[] args) {
-        System.out.println("Starting Scheduling App");
-        System.out.println("Here we go");
         launch(args);
-
+        System.out.println("Testing Git Hub");
     }
 }
 
