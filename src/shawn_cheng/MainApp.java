@@ -30,7 +30,7 @@ public class MainApp extends Application {
     
     /**
      * Start method to set title and create initial layout
-     * @param primaryStage 
+     * @param primaryStage The Primary Stage
      */
     @Override
     public void start(Stage primaryStage) {
@@ -42,7 +42,7 @@ public class MainApp extends Application {
     /**
      * Load login screen
      */
-    public void displayLogin() {
+    private void displayLogin() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("views/LoginScreen.fxml"));
@@ -51,6 +51,7 @@ public class MainApp extends Application {
             primaryStage.setScene(scene);
             LoginScreenController controller = loader.getController();
             controller.setMainApp(this);
+            primaryStage.setResizable(false);
             primaryStage.show();
             System.out.println("Displaying Login screen");
         } catch (IOException e) {
@@ -70,8 +71,9 @@ public class MainApp extends Application {
             primaryStage.setScene(scene);
             // LoginScreenController controller = loader.getController();
             // Might want to give a reference back to this object from controller.
+            primaryStage.setResizable(false);
             primaryStage.show();
-            System.out.println("Displaying Main screen");
+            System.out.println("Displaying Main s creen");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,7 +82,7 @@ public class MainApp extends Application {
 
     /**
      * Main method, used to launch the application
-     * @param args 
+     * @param args args
      */
     public static void main(String[] args) {
         launch(args);
