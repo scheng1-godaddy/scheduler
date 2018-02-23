@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
 import shawn_cheng.MainApp;
+import shawn_cheng.access.UserAccess;
 import shawn_cheng.model.User;
 
 /**
@@ -83,19 +84,30 @@ public class LoginScreenController implements Initializable {
     @FXML
     void submitButtonHandler(ActionEvent event) {
         User newUser = new User();
-        newUser.setUserName(this.userNameInput.getText());
-        newUser.setPassWord(this.passWordInput.getText());
+        String userName = this.userNameInput.getText();
+        String password = this.passWordInput.getText();
+        newUser.setUserName(userName);
+        newUser.setPassWord(password);
         if (newUser.validateUser()) {
-            this.mainapp.displayMain();
+            System.out.println("Input validated, checking against database");
+            UserAccess userAccess = new UserAccess();
+            if (userAccess.login(userName, password) != null) {
+                System.out.println("Logged in");
+                this.mainapp.displayMain();
+            } else {
+                displayLoginError();
+            }
+        } else {
+            displayLoginError();
         }
-        else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(this.rb.getString("invalid_login_title"));
-            alert.setHeaderText(this.rb.getString("invalid_login_title"));
-            alert.setContentText(this.rb.getString("invalid_login_text"));
-            alert.showAndWait();
-        }
+    }
 
+    private void displayLoginError() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(this.rb.getString("invalid_login_title"));
+        alert.setHeaderText(this.rb.getString("invalid_login_title"));
+        alert.setContentText(this.rb.getString("invalid_login_text"));
+        alert.showAndWait();
     }
 
 }
