@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="shawn_cheng.views.CustomerScreen"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shawn_cheng.controller.CustomerScreenController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b9b9b9" height="34.0" layoutY="366.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#393939" height="66.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Text fill="WHITE" layoutX="426.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customers" textAlignment="CENTER">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Text>
+      <TableView fx:id="customerTableView" layoutY="67.0" prefHeight="299.0" prefWidth="1000.0">
+        <columns>
+          <TableColumn fx:id="nameColumn" prefWidth="182.0" text="Name" />
+          <TableColumn fx:id="address1Column" prefWidth="146.0" text="Address" />
+            <TableColumn fx:id="address2Column" prefWidth="107.0" text="Address 2" />
+            <TableColumn fx:id="cityColumn" prefWidth="146.0" text="City" />
+            <TableColumn fx:id="zipColumn" prefWidth="100.0" text="Zip" />
+            <TableColumn fx:id="countryColumn" prefWidth="162.0" text="Country" />
+            <TableColumn fx:id="phoneColumn" prefWidth="156.0" text="Phone" />
+        </columns>
+      </TableView>
+      <Button blendMode="COLOR_BURN" layoutX="262.0" layoutY="366.0" mnemonicParsing="false" onAction="#addButtonHandler" prefHeight="34.0" prefWidth="123.0" text="Add" />
+      <Button blendMode="COLOR_BURN" layoutX="385.0" layoutY="366.0" mnemonicParsing="false" onAction="#modifyButtonHandler" prefHeight="34.0" prefWidth="123.0" text="Modify" />
+      <Button blendMode="COLOR_BURN" layoutX="508.0" layoutY="366.0" mnemonicParsing="false" onAction="#deleteButtonHandler" prefHeight="34.0" prefWidth="123.0" text="Delete" />
+      <Button blendMode="COLOR_BURN" layoutX="631.0" layoutY="366.0" mnemonicParsing="false" onAction="#backButtonHandler" prefHeight="34.0" prefWidth="123.0" text="Back" />
+   </children>
 </AnchorPane>

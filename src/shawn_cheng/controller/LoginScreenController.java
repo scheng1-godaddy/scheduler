@@ -45,39 +45,29 @@ public class LoginScreenController implements Initializable {
     @FXML
     private Label mainTitleLabel;
 
-    private MainApp mainapp;
+    private MainApp mainApp;
 
     Locale locale;
     ResourceBundle rb;
 
-    public void setMainApp(MainApp mainapp) { this.mainapp = mainapp; }
-
     public void initialize(URL url, ResourceBundle rb) {
-        // Get the default locale
-        this.locale = Locale.getDefault();
-        // To test locale of another country uncomment line below
-        // this.locale = new Locale("es", "MX");
-        System.out.println("Locale is: " +locale);
-
-        // Resource bundle
-        this.rb = ResourceBundle.getBundle("loginBundle", this.locale);
-
         // Set text for labels
-        this.userNameLabel.setText(this.rb.getString("username"));
-        this.passwordLabel.setText(this.rb.getString("password"));
-        this.mainTitleLabel.setText(this.rb.getString("title"));
+        //this.userNameLabel.setText(this.rb.getString("username"));
+
+    }
+
+    public void setMainApp(MainApp mainapp) { this.mainApp = mainapp; }
+
+    public void setText() {
+        System.out.println("Resource Bundle is " + mainApp.rb);
+        this.userNameLabel.setText(mainApp.rb.getString("username"));
+        this.passwordLabel.setText(mainApp.rb.getString("password"));
+        this.mainTitleLabel.setText(mainApp.rb.getString("title"));
     }
 
     @FXML
     void exitButtonHandler(ActionEvent event) {
-        // Display popup window to confirm exit
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(this.rb.getString("confirm_title"));
-        alert.setHeaderText(this.rb.getString("confirm_title"));
-        alert.setContentText(this.rb.getString("confirm_text"));
-        alert.showAndWait()
-                .filter(userResponse -> userResponse == ButtonType.OK)
-                .ifPresent(userResponse -> System.exit(0));
+        mainApp.displayExitConfirmation();
     }
 
 
@@ -93,7 +83,7 @@ public class LoginScreenController implements Initializable {
             UserAccess userAccess = new UserAccess();
             if (userAccess.login(userName, password) != null) {
                 System.out.println("Logged in");
-                this.mainapp.displayMain();
+                this.mainApp.displayMain();
             } else {
                 displayLoginError();
             }
