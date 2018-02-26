@@ -5,7 +5,7 @@ import shawn_cheng.MainApp;
 
 public class UserAccess {
 
-    Connection conn = MainApp.conn;
+    Connection conn = MainApp.getDBConnection();
     { System.out.println("Connection is " + conn); }
 
     public User login (String userName, String passWord) {

@@ -50,11 +50,8 @@ public class LoginScreenController implements Initializable {
     Locale locale;
     ResourceBundle rb;
 
-    public void initialize(URL url, ResourceBundle rb) {
-        // Set text for labels
-        //this.userNameLabel.setText(this.rb.getString("username"));
-
-    }
+    @Override
+    public void initialize(URL url, ResourceBundle rb) { }
 
     public void setMainApp(MainApp mainapp) { this.mainApp = mainapp; }
 
@@ -66,9 +63,7 @@ public class LoginScreenController implements Initializable {
     }
 
     @FXML
-    void exitButtonHandler(ActionEvent event) {
-        mainApp.displayExitConfirmation();
-    }
+    void exitButtonHandler(ActionEvent event) { mainApp.displayExitConfirmation(); }
 
 
     @FXML

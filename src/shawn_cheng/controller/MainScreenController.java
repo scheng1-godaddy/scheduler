@@ -1,17 +1,24 @@
 package shawn_cheng.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 import shawn_cheng.MainApp;
 
-public class MainScreenController {
+public class MainScreenController implements Initializable {
 
     MainApp mainApp;
+    public Stage primaryStage;
 
     @FXML
     private ResourceBundle resources;
@@ -38,7 +45,21 @@ public class MainScreenController {
 
     @FXML
     void customerHandler(ActionEvent event) {
-        mainApp.displayCustomer();
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("views/CustomerScreen.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            primaryStage = mainApp.primaryStage;
+            primaryStage.setScene(scene);
+            CustomerScreenController controller = loader.getController();
+            controller.setMainApp(mainApp);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+            System.out.println("Displaying Customer screen");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -53,7 +74,6 @@ public class MainScreenController {
 
     public void setMainApp(MainApp mainApp) {this.mainApp = mainApp;}
 
-    @FXML
-    void initialize() {
-    }
+    @Override
+    public void initialize(URL url, ResourceBundle rb) { }
 }

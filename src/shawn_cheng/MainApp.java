@@ -28,7 +28,7 @@ public class MainApp extends Application {
     /**
      * Instance Variables 
      */
-    private Stage primaryStage;
+    public Stage primaryStage;
     private AnchorPane mainLayout;
     public Locale locale;
     public ResourceBundle rb;
@@ -66,6 +66,10 @@ public class MainApp extends Application {
         } catch(ClassNotFoundException | SQLException ex){
             System.out.println(ex.getMessage());
         }
+    }
+
+    public static Connection getDBConnection() {
+        return conn;
     }
 
 
@@ -121,22 +125,6 @@ public class MainApp extends Application {
         }
     }
 
-    public void displayCustomer() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("views/CustomerScreen.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-            CustomerScreenController controller = loader.getController();
-            controller.setMainApp(this);
-            primaryStage.setResizable(false);
-            primaryStage.show();
-            System.out.println("Displaying Customer screen");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void displayExitConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

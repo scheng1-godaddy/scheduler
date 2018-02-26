@@ -14,7 +14,7 @@ import shawn_cheng.model.*;
 
 public class CustomerAccess {
 
-    private Connection conn = MainApp.conn;
+    private Connection conn = MainApp.getDBConnection();
 
     public ObservableList<Customer> getCustomers() {
         ObservableList<Customer> customers = FXCollections.observableArrayList();
@@ -41,4 +41,9 @@ public class CustomerAccess {
 
         return customers;
     }
+
+    public void addCustomer(Customer customer) {
+
+    }
+
 }

@@ -2,20 +2,26 @@ package shawn_cheng.controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.event.ActionEvent;
+import javafx.stage.Stage;
 import shawn_cheng.MainApp;
 import shawn_cheng.access.CustomerAccess;
 import shawn_cheng.model.*;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class CustomerScreenController implements Initializable {
 
-    MainApp mainApp;
+    public MainApp mainApp;
+    public Stage primaryStage;
 
     @FXML
     private TableView<Customer> customerTableView;
@@ -41,6 +47,8 @@ public class CustomerScreenController implements Initializable {
     @FXML
     private TableColumn<Customer, String> phoneColumn;
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("Initializing Customer Table");
@@ -56,6 +64,21 @@ public class CustomerScreenController implements Initializable {
 
     @FXML
     void addButtonHandler(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("views/AddModifyCustomer.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            this.primaryStage = mainApp.primaryStage;
+            primaryStage.setScene(scene);
+            AddModifyCustomerController controller = loader.getController();
+            controller.setMainApp(this.mainApp);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+            System.out.println("Displaying Customer screen");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -82,5 +105,4 @@ public class CustomerScreenController implements Initializable {
         customerTableView.setItems(customerAccess.getCustomers());
         System.out.println("Customers retrieved from database");
     }
-
 }
