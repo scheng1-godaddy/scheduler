@@ -1,7 +1,6 @@
 package shawn_cheng.controller;
 
 import java.net.URL;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -10,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
 import shawn_cheng.MainApp;
 import shawn_cheng.access.UserAccess;
+import shawn_cheng.exceptions.InvalidLoginException;
 import shawn_cheng.model.User;
 
 /**
@@ -47,30 +47,28 @@ public class LoginScreenController implements Initializable {
 
     private MainApp mainApp;
 
-    Locale locale;
-    ResourceBundle rb;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) { }
 
     public void setMainApp(MainApp mainapp) { this.mainApp = mainapp; }
 
     public void setText() {
-        System.out.println("Resource Bundle is " + mainApp.rb);
-        this.userNameLabel.setText(mainApp.rb.getString("username"));
-        this.passwordLabel.setText(mainApp.rb.getString("password"));
-        this.mainTitleLabel.setText(mainApp.rb.getString("title"));
+        System.out.println("Resource Bundle is " + MainApp.rb);
+        this.userNameLabel.setText(MainApp.rb.getString("username"));
+        this.passwordLabel.setText(MainApp.rb.getString("password"));
+        this.mainTitleLabel.setText(MainApp.rb.getString("title"));
     }
 
     @FXML
-    void exitButtonHandler(ActionEvent event) { mainApp.displayExitConfirmation(); }
+    void exitButtonHandler(ActionEvent event) { MainApp.displayExitConfirmation(); }
 
 
     @FXML
-    void submitButtonHandler(ActionEvent event) {
+    void submitButtonHandler(ActionEvent event) throws InvalidLoginException {
         User newUser = new User();
         String userName = this.userNameInput.getText();
         String password = this.passWordInput.getText();
+        MainApp.userName = userName;
         newUser.setUserName(userName);
         newUser.setPassWord(password);
         if (newUser.validateUser()) {
@@ -78,22 +76,13 @@ public class LoginScreenController implements Initializable {
             UserAccess userAccess = new UserAccess();
             if (userAccess.login(userName, password) != null) {
                 System.out.println("Logged in");
-                this.mainApp.displayMain();
+                MainApp.displayMain(this.mainApp);
             } else {
-                displayLoginError();
+                throw new InvalidLoginException("");
             }
         } else {
-            displayLoginError();
+            throw new InvalidLoginException("");
         }
     }
-
-    private void displayLoginError() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(this.rb.getString("invalid_login_title"));
-        alert.setHeaderText(this.rb.getString("invalid_login_title"));
-        alert.setContentText(this.rb.getString("invalid_login_text"));
-        alert.showAndWait();
-    }
-
 }
 

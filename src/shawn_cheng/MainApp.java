@@ -31,8 +31,9 @@ public class MainApp extends Application {
     public Stage primaryStage;
     private AnchorPane mainLayout;
     public Locale locale;
-    public ResourceBundle rb;
+    public static ResourceBundle rb;
     public static Connection conn;
+    public static String userName;
     /**
      * Constructor
      */
@@ -107,30 +108,30 @@ public class MainApp extends Application {
 
     /**
      * Load Main Menu screen
+     * @param mainApp
      */
-    public void displayMain() {
+    public static void displayMain(MainApp mainApp) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("views/MainScreen.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
+            mainApp.primaryStage.setScene(scene);
             MainScreenController controller = loader.getController();
-            controller.setMainApp(this);
-            primaryStage.setResizable(false);
-            primaryStage.show();
-            System.out.println("Displaying Main screen");
+            controller.setMainApp(mainApp);
+            mainApp.primaryStage.setResizable(false);
+            mainApp.primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    public void displayExitConfirmation() {
+    public static void displayExitConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(this.rb.getString("confirm_title"));
-        alert.setHeaderText(this.rb.getString("confirm_title"));
-        alert.setContentText(this.rb.getString("confirm_text"));
+        alert.setTitle(rb.getString("confirm_title"));
+        alert.setHeaderText(rb.getString("confirm_title"));
+        alert.setContentText(rb.getString("confirm_text"));
         alert.showAndWait()
                 .filter(userResponse -> userResponse == ButtonType.OK)
                 .ifPresent(userResponse -> System.exit(0));

@@ -89,12 +89,30 @@ public class CustomerScreenController implements Initializable {
 
     @FXML
     void backButtonHandler(ActionEvent event) {
-        mainApp.displayMain();
+        MainApp.displayMain(mainApp);
     }
 
     @FXML
     void modifyButtonHandler(ActionEvent event) {
-
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("views/AddModifyCustomer.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            this.primaryStage = mainApp.primaryStage;
+            primaryStage.setScene(scene);
+            Customer selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
+            System.out.println("Customer selected to modify is: " + selectedCustomer);
+            AddModifyCustomerController controller = loader.getController();
+            //controller.setSelectedCustomer(selectedCustomer);
+            controller.loadSelectedCustomer(selectedCustomer);
+            controller.setMainApp(this.mainApp);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+            System.out.println("Displaying Customer Modify Screen");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setMainApp(MainApp mainApp) {this.mainApp = mainApp;}

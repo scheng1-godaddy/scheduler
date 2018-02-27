@@ -1,5 +1,7 @@
 package shawn_cheng.model;
 
+import shawn_cheng.controller.AddModifyCustomerController;
+
 public class Customer {
 
     private int customerID;
@@ -41,6 +43,32 @@ public class Customer {
 
     @Override
     public String toString() {
-        return getCustomerName();
+        return "Customer ID: " + getCustomerID() + " Customer Name: " + getCustomerName();
+    }
+
+    public static String validateInput(AddModifyCustomerController controller) {
+
+        System.out.println("Checking customer input");
+        String errorMessage = "";
+
+        if (controller.nameField.getText().equals("")) {
+            errorMessage += "Invalid name\n";
+        }
+        if (controller.address1Field.getText().equals("")) {
+            errorMessage += "Invalid address\n";
+        }
+        if (controller.cityField.getText().equals("")) {
+            errorMessage += "Invalid city\n";
+        }
+        if (controller.countryField.getText().equals("")) {
+            errorMessage += "Invalid country\n";
+        }
+        if (controller.postalField.getText().equals("")) {
+            errorMessage += "Invalid postal code\n";
+        }
+        if (controller.phoneField.getText().equals("")) {
+            errorMessage += "Invalid Phone Number\n";
+        }
+        return errorMessage;
     }
 }
