@@ -58,12 +58,11 @@ public class AddModifyCustomerController implements Initializable {
 
     @FXML
     void cancelButtonHandler(ActionEvent event) {
-        displayMainCustomerScreen();
+        ScreenDisplays.displayCustomerScreen();
     }
 
     @FXML
     void saveButtonHandler(ActionEvent event) throws InvalidInputException {
-
         String errorMsg = Customer.validateInput(this);
         System.out.println("ErrorMessage is: " + errorMsg);
 
@@ -80,13 +79,11 @@ public class AddModifyCustomerController implements Initializable {
                     city);
             Customer customer = addCustomer(this.nameField.getText(), address);
             System.out.println("Customer Added: " + customer);
-            displayMainCustomerScreen();
+            ScreenDisplays.displayCustomerScreen();
         }
     }
 
     public void setMainApp(MainApp mainApp) {this.mainApp = mainApp;}
-
-    //public void setSelectedCustomer(Customer selectedCustomer) {this.selectedCustomer = selectedCustomer;}
 
     public void loadSelectedCustomer(Customer selectedCustomer) {
         this.selectedCustomer = selectedCustomer;
@@ -144,21 +141,4 @@ public class AddModifyCustomerController implements Initializable {
         return customer;
     }
 
-    public void displayMainCustomerScreen() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("views/CustomerScreen.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            primaryStage = mainApp.primaryStage;
-            primaryStage.setScene(scene);
-            CustomerScreenController controller = loader.getController();
-            controller.setMainApp(mainApp);
-            primaryStage.setResizable(false);
-            primaryStage.show();
-            System.out.println("Displaying Customer screen");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

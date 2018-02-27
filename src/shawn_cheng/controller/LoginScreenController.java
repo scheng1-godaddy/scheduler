@@ -60,7 +60,7 @@ public class LoginScreenController implements Initializable {
     }
 
     @FXML
-    void exitButtonHandler(ActionEvent event) { MainApp.displayExitConfirmation(); }
+    void exitButtonHandler(ActionEvent event) { ScreenDisplays.displayExitConfirmation(); }
 
 
     @FXML
@@ -76,7 +76,7 @@ public class LoginScreenController implements Initializable {
             UserAccess userAccess = new UserAccess();
             if (userAccess.login(userName, password) != null) {
                 System.out.println("Logged in");
-                MainApp.displayMain(this.mainApp);
+                ScreenDisplays.displayMainMenu(this.mainApp);
             } else {
                 throw new InvalidLoginException("");
             }

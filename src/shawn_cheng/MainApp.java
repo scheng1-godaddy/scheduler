@@ -1,6 +1,5 @@
 package shawn_cheng;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,9 +7,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
@@ -49,8 +45,10 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Maddy's Scheduling App");
+        ScreenDisplays.setPrimaryStage(this.primaryStage);
+        ScreenDisplays.setMainApp(this);
         localeResolver();
-        displayLogin();
+        ScreenDisplays.displayLogin(this);
     }
 
     private static void dbConnection() {
@@ -83,58 +81,6 @@ public class MainApp extends Application {
 
         // Resource bundle
         this.rb = ResourceBundle.getBundle("loginBundle", this.locale);
-    }
-
-    /**
-     * Load login screen
-     */
-    private void displayLogin() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("views/LoginScreen.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-            LoginScreenController controller = loader.getController();
-            controller.setMainApp(this);
-            controller.setText();
-            primaryStage.setResizable(false);
-            primaryStage.show();
-            System.out.println("Displaying Login screen");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Load Main Menu screen
-     * @param mainApp
-     */
-    public static void displayMain(MainApp mainApp) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("views/MainScreen.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            mainApp.primaryStage.setScene(scene);
-            MainScreenController controller = loader.getController();
-            controller.setMainApp(mainApp);
-            mainApp.primaryStage.setResizable(false);
-            mainApp.primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public static void displayExitConfirmation() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(rb.getString("confirm_title"));
-        alert.setHeaderText(rb.getString("confirm_title"));
-        alert.setContentText(rb.getString("confirm_text"));
-        alert.showAndWait()
-                .filter(userResponse -> userResponse == ButtonType.OK)
-                .ifPresent(userResponse -> System.exit(0));
     }
 
 

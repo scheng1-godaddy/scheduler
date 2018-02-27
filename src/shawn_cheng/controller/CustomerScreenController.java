@@ -64,22 +64,7 @@ public class CustomerScreenController implements Initializable {
 
     @FXML
     void addButtonHandler(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("views/AddModifyCustomer.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            this.primaryStage = mainApp.primaryStage;
-            primaryStage.setScene(scene);
-            AddModifyCustomerController controller = loader.getController();
-            controller.setMainApp(this.mainApp);
-            primaryStage.setResizable(false);
-            primaryStage.show();
-            System.out.println("Displaying Customer screen");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        ScreenDisplays.displayAddModifyCustomerScreen(null);
     }
 
     @FXML
@@ -89,30 +74,13 @@ public class CustomerScreenController implements Initializable {
 
     @FXML
     void backButtonHandler(ActionEvent event) {
-        MainApp.displayMain(mainApp);
+        ScreenDisplays.displayMainMenu(mainApp);
     }
 
     @FXML
     void modifyButtonHandler(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("views/AddModifyCustomer.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            this.primaryStage = mainApp.primaryStage;
-            primaryStage.setScene(scene);
-            Customer selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
-            System.out.println("Customer selected to modify is: " + selectedCustomer);
-            AddModifyCustomerController controller = loader.getController();
-            //controller.setSelectedCustomer(selectedCustomer);
-            controller.loadSelectedCustomer(selectedCustomer);
-            controller.setMainApp(this.mainApp);
-            primaryStage.setResizable(false);
-            primaryStage.show();
-            System.out.println("Displaying Customer Modify Screen");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Customer selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
+        ScreenDisplays.displayAddModifyCustomerScreen(selectedCustomer);
     }
 
     public void setMainApp(MainApp mainApp) {this.mainApp = mainApp;}
@@ -123,4 +91,5 @@ public class CustomerScreenController implements Initializable {
         customerTableView.setItems(customerAccess.getCustomers());
         System.out.println("Customers retrieved from database");
     }
+
 }
