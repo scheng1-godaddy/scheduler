@@ -61,6 +61,35 @@ public class CustomerAccess {
         return customerID;
     }
 
+    public void updateCustomer(Customer customer, String newCustomerName) {
+        System.out.println("updateCustomer in CustomerAccess called");
+        String query = "UPDATE customer SET customerName=?, lastUpdate=NOW(), lastUpdateBy=? WHERE customerId = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, newCustomerName);
+            stmt.setString(2, MainApp.userName);
+            stmt.setInt(3, customer.getCustomerID());
+            System.out.println("Executing the following SQL " + stmt);
+            stmt.executeUpdate();
+        } catch(SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public void deleteCustomer(Customer customer) {
+        System.out.println("updateCustomer in CustomerAccess called");
+        String query = "UPDATE customer SET active=0, lastUpdate=NOW(), lastUpdateBy=? WHERE customerId = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, MainApp.userName);
+            stmt.setInt(2, customer.getCustomerID());
+            System.out.println("Executing the following SQL " + stmt);
+            stmt.executeUpdate();
+        } catch(SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
     public int getNewId() {
         int id = 0;
         String query = "SELECT MAX(customerId) FROM customer";

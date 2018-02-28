@@ -78,6 +78,7 @@ public class AddModifyCustomerController implements Initializable {
                 modifyCountry(selectedCustomer.getAddress().getCity().getCountry());
                 modifyCity(selectedCustomer.getAddress().getCity());
                 modifyAddress(selectedCustomer.getAddress());
+                modifyCustomer(selectedCustomer);
                 ScreenDisplays.displayCustomerScreen();
             }
         }
@@ -176,4 +177,12 @@ public class AddModifyCustomerController implements Initializable {
         return customer;
     }
 
+    public void modifyCustomer(Customer customer) {
+        if (!(this.nameField.getText().equals(customer.getCustomerName()))) {
+            System.out.println("Customer name value changed");
+            // Save to database
+            CustomerAccess customerAccess = new CustomerAccess();
+            customerAccess.updateCustomer(customer, this.nameField.getText());
+        }
+    }
 }

@@ -4,20 +4,31 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="ap" prefHeight="409.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shawn_cheng.controller.LoginScreenController">
+<AnchorPane id="AnchorPane" fx:id="ap" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="364.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shawn_cheng.controller.LoginScreenController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#393939" height="128.0" stroke="BLACK" strokeType="INSIDE" width="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Button fx:id="exitButton" layoutX="234.0" layoutY="285.0" mnemonicParsing="false" onAction="#exitButtonHandler" prefHeight="27.0" prefWidth="70.0" text="Exit" AnchorPane.leftAnchor="234.0" AnchorPane.topAnchor="285.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="128.0" stroke="BLACK" strokeType="INSIDE" width="400.0">
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.9567307692307692">
+               <stops>
+                  <Stop color="#2c2c2c" />
+                  <Stop color="#2c2c2c" offset="0.007434944237918215" />
+                  <Stop color="#7c7c7c" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </fill></Rectangle>
+      <Button fx:id="exitButton" layoutX="240.0" layoutY="285.0" mnemonicParsing="false" onAction="#exitButtonHandler" prefHeight="27.0" prefWidth="70.0" text="Exit" />
       <Label fx:id="promptLabel" layoutX="78.0" layoutY="456.0" textFill="#0600cc" />
-      <TextField fx:id="userNameInput" layoutX="137.0" layoutY="183.0" AnchorPane.leftAnchor="137.0" AnchorPane.topAnchor="183.0" />
-      <Label fx:id="userNameLabel" layoutX="60.0" layoutY="188.0" text="UserName" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="188.0" />
-      <Label fx:id="passwordLabel" layoutX="61.0" layoutY="228.0" text="Password" AnchorPane.leftAnchor="61.0" AnchorPane.topAnchor="228.0" />
-      <TextField fx:id="passWordInput" layoutX="137.0" layoutY="223.0" />
-      <Button fx:id="submitButton" layoutX="151.0" layoutY="285.0" mnemonicParsing="false" onAction="#submitButtonHandler" prefHeight="27.0" prefWidth="70.0" text="Submit" AnchorPane.leftAnchor="151.0" AnchorPane.topAnchor="285.0" />
-      <Label fx:id="mainTitleLabel" layoutX="67.0" layoutY="83.0" text="Maddy's Scheduler" textFill="WHITE" AnchorPane.leftAnchor="67.0" AnchorPane.topAnchor="83.0">
+      <TextField fx:id="userNameInput" layoutX="144.0" layoutY="183.0" />
+      <Label fx:id="userNameLabel" layoutX="67.0" layoutY="188.0" text="UserName" />
+      <Label fx:id="passwordLabel" layoutX="68.0" layoutY="228.0" text="Password" />
+      <TextField fx:id="passWordInput" layoutX="144.0" layoutY="223.0" />
+      <Button fx:id="submitButton" layoutX="157.0" layoutY="285.0" mnemonicParsing="false" onAction="#submitButtonHandler" prefHeight="27.0" prefWidth="70.0" text="Submit" />
+      <Label fx:id="mainTitleLabel" layoutX="67.0" layoutY="63.0" text="Maddy's Scheduler" textFill="WHITE">
          <font>
             <Font size="29.0" />
          </font>

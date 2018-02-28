@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.event.ActionEvent;
@@ -74,7 +76,17 @@ public class CustomerScreenController implements Initializable {
         if (selectedCustomer == null) {
             throw new InvalidSelectionException("Need a valid selection to delete");
         } else {
-            // Delete customer
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Confirmation");
+            alert.setHeaderText("Delete Confirmation");
+            alert.setContentText("Are you sure you want to delete?");
+            alert.showAndWait()
+                    .filter(userResponse -> userResponse == ButtonType.OK)
+                    .ifPresent(userResponse -> {
+                        CustomerAccess customerAccess = new CustomerAccess();
+                        customerAccess.deleteCustomer(selectedCustomer);
+                        loadCustomerTable();
+                    });
         }
     }
 
