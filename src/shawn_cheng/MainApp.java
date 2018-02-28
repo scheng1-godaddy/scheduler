@@ -25,7 +25,6 @@ public class MainApp extends Application {
      * Instance Variables 
      */
     public Stage primaryStage;
-    private AnchorPane mainLayout;
     public Locale locale;
     public static ResourceBundle rb;
     public static Connection conn;

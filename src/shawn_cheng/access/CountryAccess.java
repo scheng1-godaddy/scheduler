@@ -53,6 +53,21 @@ public class CountryAccess {
         return countryID;
     }
 
+    public void updateCountry(Country country, String newCountryName) {
+        System.out.println("updateCountry in CountryAccess called");
+        String query = "UPDATE country SET country=?, lastUpdate=NOW(), lastUpdateBy=? WHERE countryId = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, newCountryName);
+            stmt.setString(2, MainApp.userName);
+            stmt.setInt(3, country.getCountryID());
+            System.out.println("Executing the following SQL " + stmt);
+            stmt.executeUpdate();
+        } catch(SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
     public int getNewId() {
         int id = 0;
         String query = "SELECT MAX(countryId) FROM country";

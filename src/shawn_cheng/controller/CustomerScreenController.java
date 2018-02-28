@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import shawn_cheng.MainApp;
 import shawn_cheng.access.CustomerAccess;
+import shawn_cheng.exceptions.InvalidSelectionException;
 import shawn_cheng.model.*;
 
 import java.io.IOException;
@@ -78,8 +79,11 @@ public class CustomerScreenController implements Initializable {
     }
 
     @FXML
-    void modifyButtonHandler(ActionEvent event) {
+    void modifyButtonHandler(ActionEvent event) throws InvalidSelectionException {
         Customer selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
+        if (selectedCustomer == null) {
+            throw new InvalidSelectionException("Need a valid selection to modify");
+        }
         ScreenDisplays.displayAddModifyCustomerScreen(selectedCustomer);
     }
 

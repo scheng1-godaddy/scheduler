@@ -63,7 +63,7 @@ public class CustomerAccess {
 
     public int getNewId() {
         int id = 0;
-        String query = "SELECT MAX(addressId) FROM customer";
+        String query = "SELECT MAX(customerId) FROM customer";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);

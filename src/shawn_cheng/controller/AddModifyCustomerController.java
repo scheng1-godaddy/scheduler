@@ -2,23 +2,16 @@ package shawn_cheng.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import shawn_cheng.MainApp;
-import shawn_cheng.access.AddressAccess;
-import shawn_cheng.access.CityAccess;
-import shawn_cheng.access.CountryAccess;
-import shawn_cheng.access.CustomerAccess;
+import shawn_cheng.access.*;
 import shawn_cheng.exceptions.InvalidInputException;
 import shawn_cheng.model.*;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 
 public class AddModifyCustomerController implements Initializable {
@@ -26,8 +19,6 @@ public class AddModifyCustomerController implements Initializable {
     private MainApp mainApp;
 
     private Customer selectedCustomer;
-
-    public Stage primaryStage;
 
     @FXML
     public TextField nameField;
@@ -69,17 +60,26 @@ public class AddModifyCustomerController implements Initializable {
         if (errorMsg.length() > 0) {
             throw new InvalidInputException(errorMsg);
         } else {
-            System.out.println("Adding Customer");
-            Country country = addCountry(this.countryField.getText());
-            City city = addCity(this.cityField.getText(), country);
-            Address address = addAddress(this.address1Field.getText(),
-                    this.address2Field.getText(),
-                    this.postalField.getText(),
-                    this.phoneField.getText(),
-                    city);
-            Customer customer = addCustomer(this.nameField.getText(), address);
-            System.out.println("Customer Added: " + customer);
-            ScreenDisplays.displayCustomerScreen();
+            if (this.selectedCustomer == null) {
+                System.out.println("Adding Customer");
+                Country country = addCountry(this.countryField.getText());
+                City city = addCity(this.cityField.getText(), country);
+                Address address = addAddress(this.address1Field.getText(),
+                        this.address2Field.getText(),
+                        this.postalField.getText(),
+                        this.phoneField.getText(),
+                        city);
+                Customer customer = addCustomer(this.nameField.getText(), address);
+                System.out.println("Customer Added: " + customer);
+                ScreenDisplays.displayCustomerScreen();
+            } else {
+                // Logic for modifying customer
+                System.out.println("Modifying customer information");
+                modifyCountry(selectedCustomer.getAddress().getCity().getCountry());
+                modifyCity(selectedCustomer.getAddress().getCity());
+                modifyAddress(selectedCustomer.getAddress());
+                ScreenDisplays.displayCustomerScreen();
+            }
         }
     }
 
@@ -105,15 +105,33 @@ public class AddModifyCustomerController implements Initializable {
         return country;
     }
 
+    public void modifyCountry(Country country) {
+        if (!(this.countryField.getText().equals(country.getCountry()))) {
+            System.out.println("Country value changed");
+            // Save to database
+            CountryAccess countryAccess = new CountryAccess();
+            countryAccess.updateCountry(country, this.countryField.getText());
+        }
+    }
+
     public City addCity (String cityName, Country country) {
         System.out.println("addCity called");
         City city = new City();
-        city.setCity(this.cityField.getText());
+        city.setCity(cityName);
         city.setCountry(country);
         CityAccess cityAccess = new CityAccess();
         int cityID = cityAccess.addCity(city);
         city.setCityID(cityID);
         return city;
+    }
+
+    public void modifyCity(City city) {
+        if (!(this.cityField.getText().equals(city.getCity()))) {
+            System.out.println("City value changed");
+            // Save to database
+            CityAccess cityAccess = new CityAccess();
+            cityAccess.updateCity(city, this.cityField.getText());
+        }
     }
 
     public Address addAddress (String address1, String address2, String postalCode, String phone, City city) {
@@ -128,6 +146,23 @@ public class AddModifyCustomerController implements Initializable {
         int addressID = addressAccess.addAddress(address);
         address.setAddressID(addressID);
         return address;
+    }
+
+    public void modifyAddress(Address address) {
+        if (!(this.address1Field.getText().equals(address.getAddress())) ||
+                !(this.address2Field.getText().equals(address.getAddress2())) ||
+                !(this.postalField.getText().equals(address.getPostalCode())) ||
+                !(this.phoneField.getText().equals(address.getPhone()))) {
+            System.out.println("Address value changed");
+            // Save to database
+            AddressAccess addressAccess = new AddressAccess();
+            addressAccess.updateAddress(address,
+                    this.address1Field.getText(),
+                    this.address2Field.getText(),
+                    this.postalField.getText(),
+                    this.phoneField.getText()
+            );
+        }
     }
 
     public Customer addCustomer (String customerName, Address address) {

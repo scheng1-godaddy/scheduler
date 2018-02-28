@@ -62,6 +62,26 @@ public class AddressAccess {
         return addressID;
     }
 
+    public void updateAddress(Address address, String newAddress1, String newAddress2,
+                              String postalCode, String phoneNumber) {
+        System.out.println("updateAddress in AddressAccess called");
+        String query = "UPDATE address SET address=?, address2=?, postalCode=?, phone=?, " +
+                "lastUpdate=NOW(), lastUpdateBy=? WHERE addressId = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, newAddress1);
+            stmt.setString(2, newAddress2);
+            stmt.setString(3, postalCode);
+            stmt.setString(4, phoneNumber);
+            stmt.setString(5, MainApp.userName);
+            stmt.setInt(6, address.getAddressID());
+            System.out.println("Executing the following SQL " + stmt);
+            stmt.executeUpdate();
+        } catch(SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
     public int getNewId() {
         int id = 0;
         String query = "SELECT MAX(addressId) FROM address";
