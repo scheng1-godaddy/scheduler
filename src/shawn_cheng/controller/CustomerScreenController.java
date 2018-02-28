@@ -69,8 +69,13 @@ public class CustomerScreenController implements Initializable {
     }
 
     @FXML
-    void deleteButtonHandler(ActionEvent event) {
-
+    void deleteButtonHandler(ActionEvent event) throws InvalidSelectionException {
+        Customer selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
+        if (selectedCustomer == null) {
+            throw new InvalidSelectionException("Need a valid selection to delete");
+        } else {
+            // Delete customer
+        }
     }
 
     @FXML
