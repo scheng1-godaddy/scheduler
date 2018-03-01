@@ -10,15 +10,18 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import shawn_cheng.MainApp;
+import shawn_cheng.model.Appointment;
 import shawn_cheng.model.Customer;
 
 import java.net.URL;
+import java.time.YearMonth;
 import java.util.ResourceBundle;
 
-public class CalendarMonthlyController implements Initializable {
+public class CalendarMonthlyController extends CalendarControllerAbstract implements Initializable {
 
     private MainApp mainApp;
-    public Customer selectedCustomer;
+
+    private YearMonth selectedMonth;
 
     @FXML
     private Label monthLabel;
@@ -28,6 +31,11 @@ public class CalendarMonthlyController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        this.selectedMonth = YearMonth.now();
+        displayCalendar();
+
+        // Below is all trial stuff
         BorderPane bp = new BorderPane();
         Label textLabel = new Label();
         textLabel.setText("Test Label");
@@ -37,13 +45,18 @@ public class CalendarMonthlyController implements Initializable {
         bp.setTop(numLabel);
 
         // Trying something with ListViews
-        ObservableList<Customer> customers = FXCollections.observableArrayList();
-        Customer customer1 = new Customer();
-        customer1.setCustomerName("TestCustomer");
-        customers.add(customer1);
-        ListView<Customer> listView = new ListView<>(customers);
+        Appointment newAppointment = new Appointment();
+        newAppointment.setTitle("New Appointment");
+        Appointment newAppointment2 =  new Appointment();
+        newAppointment2.setTitle("Another Appointment");
+
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+        appointments.add(newAppointment);
+        appointments.add(newAppointment2);
+
+        ListView<Appointment> listView = new ListView<>(appointments);
         listView.getSelectionModel().selectedItemProperty()
-                .addListener((obs, oldVal, newVal) -> selectedCustomer = newVal);
+                .addListener((obs, oldVal, newVal) -> selectedAppointment = newVal);
         bp.setCenter(listView);
 
 
@@ -56,7 +69,6 @@ public class CalendarMonthlyController implements Initializable {
 
     @FXML
     void addHandler(ActionEvent event) {
-
 
     }
 
@@ -72,23 +84,30 @@ public class CalendarMonthlyController implements Initializable {
 
     @FXML
     void modifyHandler(ActionEvent event) {
-        System.out.println("The selected customer is: " + selectedCustomer);
+        System.out.println("The selected customer is: " + selectedAppointment);
 
     }
 
     @FXML
     void nextMonthHandler(ActionEvent event) {
-
+        selectedMonth = selectedMonth.plusMonths(1);
+        displayCalendar();
     }
 
     @FXML
     void previousMonthHandler(ActionEvent event) {
-
+        selectedMonth = selectedMonth.minusMonths(1);
+        displayCalendar();
     }
 
     @FXML
     void weeklyViewHandler(ActionEvent event) {
 
+    }
+
+    public void displayCalendar() {
+        selectedAppointment = null;
+        this.monthLabel.setText(this.selectedMonth.getMonth().name() + " " + selectedMonth.getYear());
     }
 
 }
