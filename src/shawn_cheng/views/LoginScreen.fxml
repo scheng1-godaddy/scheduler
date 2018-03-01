@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="ap" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="364.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shawn_cheng.controller.LoginScreenController">
+<AnchorPane id="AnchorPane" fx:id="ap" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="364.0" prefWidth="400.0" stylesheets="@schedulerCSS.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shawn_cheng.controller.LoginScreenController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="128.0" stroke="BLACK" strokeType="INSIDE" width="400.0">
          <fill>

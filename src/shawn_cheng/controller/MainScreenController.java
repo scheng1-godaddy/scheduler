@@ -34,7 +34,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     void appointmentsHandler(ActionEvent event) {
-
+        ScreenDisplays.displayAppointmentsScreen();
     }
 
     @FXML

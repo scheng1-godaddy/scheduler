@@ -114,4 +114,22 @@ public class ScreenDisplays {
             e.printStackTrace();
         }
     }
+
+    public static void displayAppointmentsScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("views/CalendarMonthlyScreen.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            CalendarMonthlyController controller = loader.getController();
+            controller.setMainApp(mainApp);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+            System.out.println("Displaying Appointments screen");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
