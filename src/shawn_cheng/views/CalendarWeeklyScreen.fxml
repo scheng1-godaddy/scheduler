@@ -21,10 +21,12 @@
          </font>
       </Label>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#9aa6b2" height="40.0" layoutY="170.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
-      <Button blendMode="MULTIPLY" layoutX="636.0" layoutY="170.0" mnemonicParsing="false" onAction="#nextMonthHandler" prefHeight="40.0" prefWidth="150.0" text="Next Month &gt;" />
-      <Button blendMode="MULTIPLY" layoutX="206.0" layoutY="170.0" mnemonicParsing="false" onAction="#previousMonthHandler" prefHeight="40.0" prefWidth="150.0" text="&lt; Previous Month" />
-      <GridPane fx:id="calendarGrid" gridLinesVisible="true" hgap="1.0" layoutY="250.0" prefHeight="470.0" prefWidth="1000.0" vgap="1.0">
+      <Button blendMode="MULTIPLY" layoutX="636.0" layoutY="170.0" mnemonicParsing="false" onAction="#nextWeekHandler" prefHeight="40.0" prefWidth="150.0" text="Next Week &gt;" />
+      <Button blendMode="MULTIPLY" layoutX="206.0" layoutY="170.0" mnemonicParsing="false" onAction="#previousWeekHandler" prefHeight="40.0" prefWidth="150.0" text="&lt; Previous Week" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dee6ee" height="450.0" layoutY="270.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="125.0" />
+      <GridPane fx:id="calendarGrid" gridLinesVisible="true" hgap="1.0" layoutY="270.0" prefHeight="450.0" prefWidth="1000.0" vgap="1.0">
         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -36,17 +38,30 @@
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <padding>
             <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
          </padding>
+         <children>
+            <Label text="9:00" />
+            <Label text="10:00" GridPane.rowIndex="1" />
+            <Label text="11:00" GridPane.rowIndex="2" />
+            <Label text="12:00" GridPane.rowIndex="3" />
+            <Label text="1:00" GridPane.rowIndex="4" />
+            <Label text="2:00" GridPane.rowIndex="5" />
+            <Label text="3:00" GridPane.rowIndex="6" />
+            <Label text="4:00" GridPane.rowIndex="7" />
+         </children>
       </GridPane>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bfbfbf" height="40.0" layoutY="210.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bfbfbf" height="60.0" layoutY="210.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c9c9c9" height="40.0" layoutY="720.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
-      <GridPane layoutY="210.0" prefHeight="40.0" prefWidth="1000.0" style="-fx-focus-color: transparent;">
+      <GridPane layoutX="123.0" layoutY="210.0" prefHeight="60.0" prefWidth="877.0" style="-fx-focus-color: transparent;">
         <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -57,16 +72,17 @@
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sunday" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Monday" GridPane.columnIndex="1" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tuesday" GridPane.columnIndex="2" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Wednesday" GridPane.columnIndex="3" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thursday" GridPane.columnIndex="4" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Friday" GridPane.columnIndex="5" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Saturday" GridPane.columnIndex="6" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sunday" GridPane.rowIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Monday" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tuesday" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Wednesday" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thursday" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Friday" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Saturday" GridPane.columnIndex="6" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <Button blendMode="MULTIPLY" layoutX="592.0" layoutY="725.0" mnemonicParsing="false" onAction="#addHandler" prefHeight="31.0" prefWidth="135.0" text="Add">
@@ -76,8 +92,8 @@
       </Button>
       <Button blendMode="MULTIPLY" layoutX="726.0" layoutY="725.0" mnemonicParsing="false" onAction="#modifyHandler" prefHeight="31.0" prefWidth="135.0" text="Modify" />
       <Button blendMode="MULTIPLY" layoutX="861.0" layoutY="725.0" mnemonicParsing="false" onAction="#deleteHandler" prefHeight="31.0" prefWidth="135.0" text="Delete" />
-      <Button layoutX="8.0" layoutY="727.0" mnemonicParsing="false" onAction="#weeklyViewHandler" text="Weekly View" />
-      <Label fx:id="monthLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="356.0" layoutY="170.0" prefHeight="40.0" prefWidth="281.0" text="Month" textAlignment="CENTER">
+      <Button layoutX="8.0" layoutY="727.0" mnemonicParsing="false" onAction="#monthlyViewHandler" text="Monthly View" />
+      <Label fx:id="weekLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="356.0" layoutY="170.0" prefHeight="40.0" prefWidth="281.0" text="Week" textAlignment="CENTER">
          <font>
             <Font size="20.0" />
          </font>

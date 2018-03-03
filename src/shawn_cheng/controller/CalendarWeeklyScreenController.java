@@ -2,19 +2,16 @@ package shawn_cheng.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import shawn_cheng.MainApp;
 import shawn_cheng.model.Appointment;
-import shawn_cheng.model.Customer;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -23,7 +20,7 @@ import java.time.YearMonth;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class CalendarMonthlyController extends CalendarControllerAbstract implements Initializable {
+public class CalendarWeeklyScreenController extends AbstractCalendarController implements Initializable {
 
     private MainApp mainApp;
 
@@ -45,81 +42,39 @@ public class CalendarMonthlyController extends CalendarControllerAbstract implem
         this.calendarAppointments = createAppointmentsList();
         displayMonthLabel();
         displayCalendar();
-
-        /*
-        // Below is all trial stuff
-        BorderPane bp = new BorderPane();
-        Label textLabel = new Label();
-        textLabel.setText("Test Label");
-        Label numLabel = new Label();
-        numLabel.setText("1");
-        //bp.setCenter(textLabel);
-        bp.setTop(numLabel);
-        BorderPane.setAlignment(numLabel, Pos.TOP_RIGHT);
-
-        // Trying something with ListViews
-        Appointment newAppointment = new Appointment();
-        newAppointment.setTitle("New Appointment");
-
-        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-        appointments.add(newAppointment);
-
-        ListView<Appointment> listView = new ListView<>(appointments);
-        listView.getSelectionModel().selectedItemProperty()
-                .addListener((obs, oldVal, newVal) -> selectedAppointment = newVal);
-        bp.setCenter(listView);
-
-        // Add another BorderPane (datePane)
-        /*
-        BorderPane bp2 = new BorderPane();
-        Appointment newAppointment2 = new Appointment();
-        newAppointment2.setTitle("2nd Appointment");
-        ObservableList<Appointment> appointments2 = FXCollections.observableArrayList();
-        appointments2.add(newAppointment2);
-        ListView<Appointment> listView2 = new ListView<>(appointments2);
-        listView2.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> selectedAppointment = newVal);
-        bp2.setCenter(listView2);
-        Label numLabel2 = new Label();
-        numLabel2.setText("2");
-        bp2.setTop(numLabel2);
-        BorderPane.setAlignment(numLabel2, Pos.TOP_RIGHT);
-        */
-
-
-        /*//Add to Calendar
-        calendarGrid.add(bp, this.selectedMonth.atDay(1).getDayOfWeek().getValue(), 0);
-        //calendarGrid.add(bp2, this.selectedMonth.atDay(2).getDayOfWeek().getValue(), 0);
-
-        System.out.println(createAppointmentsList().get(0).getTitle());
-        */
-
     }
 
+    /**
+     * Reference to mainApp object
+     * @param mainApp
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
 
-    @FXML
-    void addHandler(ActionEvent event) {
-
-    }
-
-    @FXML
-    void backHandler(ActionEvent event) {
-        ScreenDisplays.displayMainMenu();
-    }
-
+    /**
+     * Handler to delete selected appointment.
+     * @param event
+     */
     @FXML
     void deleteHandler(ActionEvent event) {
 
     }
 
+    /**
+     * Handler to modify selected appointment.
+     * @param event
+     */
     @FXML
     void modifyHandler(ActionEvent event) {
         System.out.println("The selected customer is: " + selectedAppointment);
 
     }
 
+    /**
+     * Switches to next month
+     * @param event
+     */
     @FXML
     void nextMonthHandler(ActionEvent event) {
         selectedMonth = selectedMonth.plusMonths(1);
@@ -127,6 +82,10 @@ public class CalendarMonthlyController extends CalendarControllerAbstract implem
         displayCalendar();
     }
 
+    /**
+     * Switches to the previous month
+     * @param event
+     */
     @FXML
     void previousMonthHandler(ActionEvent event) {
         selectedMonth = selectedMonth.minusMonths(1);
@@ -134,17 +93,32 @@ public class CalendarMonthlyController extends CalendarControllerAbstract implem
         displayCalendar();
     }
 
+    /**
+     * Switches to the weekly view of the calendar.
+     * @param event
+     */
     @FXML
     void weeklyViewHandler(ActionEvent event) {
 
     }
 
+    /**
+     * Displays the month based on the currently selected month.
+     */
     public void displayMonthLabel() {
-        selectedAppointment = null;
         this.monthLabel.setText(this.selectedMonth.getMonth().name() + " " + selectedMonth.getYear());
     }
 
+    /**
+     * This method displays the calendar information. It will use nested loops to go through the
+     * GridPane that represents the calendar. At each cell it will call the getDailyPane method
+     * to retrieve a Border Pane containing the appointment information that will be added to the grid.
+     */
     public void displayCalendar() {
+
+        viewingWeeklyCalendar = true;
+
+        selectedAppointment = null;
 
         // Clear what's currently on the grid
         calendarGrid.getChildren().clear();
@@ -198,6 +172,7 @@ public class CalendarMonthlyController extends CalendarControllerAbstract implem
         }
     }
 
+    // This is for testing, remove
     public ObservableList<Appointment> createAppointmentsList() {
         // Create appt1
         Appointment appt1 = new Appointment();
@@ -226,6 +201,12 @@ public class CalendarMonthlyController extends CalendarControllerAbstract implem
         return calendarAppointments;
     }
 
+    /**
+     * This method generates the BorderPane node that contains both the day of month label
+     * and the ListView that houses the appointment information.
+     * @param currentDate
+     * @return dailyBorderPane
+     */
     public BorderPane getDailyPane (LocalDate currentDate) {
         // Make the Border Pane that will contain the day of month and appointment info
         BorderPane dailyBorderPane = new BorderPane();
@@ -241,6 +222,10 @@ public class CalendarMonthlyController extends CalendarControllerAbstract implem
 
         // Create list view from daily appointments.
         ListView<Appointment> dailyApptListView = new ListView<>(dailyAppointments);
+
+        // Add listener to detect when user selects appointment in the list view
+        dailyApptListView.getSelectionModel().selectedItemProperty()
+                .addListener((obs, oldVal, newVal) -> selectedAppointment = newVal);
 
         // Attach day of month to the daily border pane
         dailyBorderPane.setTop(dayOfMonthLabel);

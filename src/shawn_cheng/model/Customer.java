@@ -1,6 +1,6 @@
 package shawn_cheng.model;
 
-import shawn_cheng.controller.CustomerScreenController;
+import shawn_cheng.controller.ManageCustomerScreenController;
 
 public class Customer {
 
@@ -43,10 +43,10 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer ID: " + getCustomerID() + " Customer Name: " + getCustomerName();
+        return getCustomerName();
     }
 
-    public static String validateInput(CustomerScreenController controller) {
+    public static String validateInput(ManageCustomerScreenController controller) {
 
         System.out.println("Checking customer input");
         String errorMessage = "";

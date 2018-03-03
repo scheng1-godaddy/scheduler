@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1000.0" stylesheets="@schedulerCSS.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shawn_cheng.controller.ManageAppointmentController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#323232" height="90.0" layoutY="80.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Label alignment="CENTER" layoutY="80.0" prefHeight="90.0" prefWidth="1000.0" text="Manage Appointment" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#9aa6b2" height="120.0" layoutY="170.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b5b5b5" height="120.0" layoutY="291.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c9c9c9" height="40.0" layoutY="720.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Button blendMode="MULTIPLY" layoutX="726.0" layoutY="725.0" mnemonicParsing="false" onAction="#saveButtonHandler" prefHeight="31.0" prefWidth="135.0" text="Save" />
+      <Button blendMode="MULTIPLY" layoutX="861.0" layoutY="725.0" mnemonicParsing="false" onAction="#cancelButtonHandler" prefHeight="31.0" prefWidth="135.0" text="Cancel" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bcbcbc" height="40.0" layoutY="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Button blendMode="MULTIPLY" layoutX="183.0" layoutY="40.0" mnemonicParsing="false" onAction="#appointmentsButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Appointments" />
+      <Button blendMode="MULTIPLY" layoutX="342.0" layoutY="40.0" mnemonicParsing="false" onAction="#customersButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Customers" />
+      <Button blendMode="MULTIPLY" layoutX="501.0" layoutY="40.0" mnemonicParsing="false" onAction="#reportsButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Reports" />
+      <Button blendMode="MULTIPLY" layoutX="660.0" layoutY="40.0" mnemonicParsing="false" onAction="#exitButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Exit" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#203451" height="42.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Text fill="WHITE" layoutX="356.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maddy's Scheduling Application">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d0d5da" height="188.0" layoutY="412.0" stroke="#c6c6c6" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" blendMode="MULTIPLY" fill="#c3c3c3" height="550.0" layoutY="170.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="225.0" />
+      <Text fill="WHITE" layoutX="80.0" layoutY="366.0" strokeType="OUTSIDE" strokeWidth="0.0" text="What">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="89.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Who">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="72.0" layoutY="517.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Text>
+      <ComboBox fx:id="customerField" layoutX="298.0" layoutY="227.0" prefHeight="27.0" prefWidth="275.0" promptText="Select Customer" />
+      <Text fill="WHITE" layoutX="68.0" layoutY="674.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Where">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Text>
+      <Text fill="#393939" layoutX="299.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer:">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Text>
+      <TextField fx:id="contactField" layoutX="639.0" layoutY="227.0" prefHeight="27.0" prefWidth="275.0" promptText="Enter Contact" />
+      <Text fill="#393939" layoutX="639.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact:">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Text>
+      <TextField fx:id="titleField" layoutX="298.0" layoutY="353.0" prefHeight="27.0" prefWidth="275.0" promptText="Enter Title" />
+      <TextField fx:id="locationField" layoutX="298.0" layoutY="657.0" prefHeight="27.0" prefWidth="275.0" promptText="Enter Location" />
+      <TextField fx:id="urlField" layoutX="639.0" layoutY="657.0" prefHeight="27.0" prefWidth="275.0" promptText="Enter URL" />
+      <Text fill="#393939" layoutX="299.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointment TItle:">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Text>
+      <Text fill="#393939" layoutX="639.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointment Description/Type: :">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Text>
+      <Text fill="#393939" layoutX="299.0" layoutY="455.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date:">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Text>
+      <Text fill="#393939" layoutX="299.0" layoutY="523.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Time:">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Text>
+      <Text fill="#393939" layoutX="643.0" layoutY="523.0" strokeType="OUTSIDE" strokeWidth="0.0" text="End Time:">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Text>
+      <ComboBox fx:id="startTimeField" layoutX="298.0" layoutY="533.0" prefHeight="27.0" prefWidth="275.0" promptText="Select Start Time" />
+      <ComboBox fx:id="endTimeField" layoutX="643.0" layoutY="533.0" prefHeight="27.0" prefWidth="275.0" promptText="Select End Time" />
+      <Text fill="#393939" layoutX="300.0" layoutY="647.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location:">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Text>
+      <Text fill="#393939" layoutX="639.0" layoutY="647.0" strokeType="OUTSIDE" strokeWidth="0.0" text="URL:">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Text>
+      <DatePicker fx:id="dateField" layoutX="299.0" layoutY="465.0" prefHeight="27.0" prefWidth="275.0" promptText="Select Date" />
+      <ComboBox fx:id="descriptionField" layoutX="639.0" layoutY="353.0" prefHeight="27.0" prefWidth="275.0" promptText="Select Description/Type" />
+   </children>
+</AnchorPane>

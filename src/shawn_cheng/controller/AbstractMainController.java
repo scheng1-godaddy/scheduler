@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 public class AbstractMainController {
     @FXML
     void appointmentsButtonHandler(ActionEvent event) {
-        ScreenDisplays.displayAppointmentsScreen();
+        ScreenDisplays.displayMonthlyCalendarScreen();
     }
 
     @FXML

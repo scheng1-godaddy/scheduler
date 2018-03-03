@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CustomerScreenController extends AbstractMainController implements Initializable {
+public class ManageCustomerScreenController extends AbstractMainController implements Initializable {
 
     public MainApp mainApp;
     public Stage primaryStage;
