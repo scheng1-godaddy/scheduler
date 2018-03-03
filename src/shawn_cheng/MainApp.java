@@ -47,7 +47,7 @@ public class MainApp extends Application {
         ScreenDisplays.setPrimaryStage(this.primaryStage);
         ScreenDisplays.setMainApp(this);
         localeResolver();
-        ScreenDisplays.displayLogin(this);
+        ScreenDisplays.displayLogin();
     }
 
     private static void dbConnection() {

@@ -54,6 +54,7 @@ public class AddModifyCustomerController implements Initializable {
 
     @FXML
     void saveButtonHandler(ActionEvent event) throws InvalidInputException {
+        /*
         String errorMsg = Customer.validateInput(this);
         System.out.println("ErrorMessage is: " + errorMsg);
 
@@ -82,6 +83,7 @@ public class AddModifyCustomerController implements Initializable {
                 ScreenDisplays.displayCustomerScreen();
             }
         }
+        */
     }
 
     public void setMainApp(MainApp mainApp) {this.mainApp = mainApp;}

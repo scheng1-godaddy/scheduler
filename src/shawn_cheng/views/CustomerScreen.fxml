@@ -1,36 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="1000.0" stylesheets="@schedulerCSS.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shawn_cheng.controller.CustomerScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1000.0" stylesheets="@schedulerCSS.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shawn_cheng.controller.CustomerScreenController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b9b9b9" height="34.0" layoutY="366.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#393939" height="66.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
-      <Text fill="WHITE" layoutX="426.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customers" textAlignment="CENTER">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b5b5b5" height="221.0" layoutY="543.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c9c9c9" height="40.0" layoutY="495.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#323232" height="90.0" layoutY="81.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Label alignment="CENTER" layoutY="87.0" prefHeight="81.0" prefWidth="1000.0" text="Customers" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font size="29.0" />
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <Button blendMode="MULTIPLY" layoutX="725.0" layoutY="715.0" mnemonicParsing="false" onAction="#saveButtonHandler" prefHeight="31.0" prefWidth="135.0" text="Save">
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </Button>
+      <Button blendMode="MULTIPLY" layoutX="725.0" layoutY="500.0" mnemonicParsing="false" onAction="#modifyButtonHandler" prefHeight="31.0" prefWidth="135.0" text="Modify" />
+      <Button blendMode="MULTIPLY" layoutX="860.0" layoutY="500.0" mnemonicParsing="false" onAction="#deleteButtonHandler" prefHeight="31.0" prefWidth="135.0" text="Delete" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bcbcbc" height="40.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Button blendMode="MULTIPLY" layoutX="183.0" layoutY="41.0" mnemonicParsing="false" onAction="#appointmentsButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Appointments" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#949494" height="40.0" layoutX="342.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="159.0" />
+      <Button blendMode="MULTIPLY" layoutX="342.0" layoutY="41.0" mnemonicParsing="false" onAction="#customersButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Customers" />
+      <Button blendMode="MULTIPLY" layoutX="501.0" layoutY="41.0" mnemonicParsing="false" onAction="#reportsButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Reports" />
+      <Button blendMode="MULTIPLY" layoutX="660.0" layoutY="41.0" mnemonicParsing="false" onAction="#exitButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Exit" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#203451" height="42.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Text fill="WHITE" layoutX="356.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maddy's Scheduling Application">
+         <font>
+            <Font size="20.0" />
          </font>
       </Text>
-      <TableView fx:id="customerTableView" layoutY="67.0" prefHeight="299.0" prefWidth="1000.0">
+      <TableView fx:id="customerTableView" layoutY="171.0" prefHeight="322.0" prefWidth="1000.0">
         <columns>
-          <TableColumn fx:id="nameColumn" prefWidth="182.0" text="Name" />
-          <TableColumn fx:id="address1Column" prefWidth="146.0" text="Address" />
-            <TableColumn fx:id="address2Column" prefWidth="107.0" text="Address 2" />
-            <TableColumn fx:id="cityColumn" prefWidth="146.0" text="City" />
-            <TableColumn fx:id="zipColumn" prefWidth="100.0" text="Zip" />
-            <TableColumn fx:id="countryColumn" prefWidth="162.0" text="Country" />
-            <TableColumn fx:id="phoneColumn" prefWidth="156.0" text="Phone" />
+          <TableColumn fx:id="nameColumn" prefWidth="151.0" text="Name" />
+          <TableColumn fx:id="address1Column" prefWidth="198.0" text="Address" />
+            <TableColumn fx:id="address2Column" prefWidth="128.0" text="Address 2" />
+            <TableColumn fx:id="cityColumn" prefWidth="131.0" text="City" />
+            <TableColumn fx:id="zipColumn" prefWidth="111.0" text="Zip" />
+            <TableColumn fx:id="countryColumn" prefWidth="145.0" text="Country" />
+            <TableColumn fx:id="phoneColumn" prefWidth="135.0" text="Phone" />
         </columns>
       </TableView>
-      <Button blendMode="COLOR_BURN" layoutX="262.0" layoutY="366.0" mnemonicParsing="false" onAction="#addButtonHandler" prefHeight="34.0" prefWidth="123.0" text="Add" />
-      <Button blendMode="COLOR_BURN" layoutX="385.0" layoutY="366.0" mnemonicParsing="false" onAction="#modifyButtonHandler" prefHeight="34.0" prefWidth="123.0" text="Modify" />
-      <Button blendMode="COLOR_BURN" layoutX="508.0" layoutY="366.0" mnemonicParsing="false" onAction="#deleteButtonHandler" prefHeight="34.0" prefWidth="123.0" text="Delete" />
-      <Button blendMode="COLOR_BURN" layoutX="631.0" layoutY="366.0" mnemonicParsing="false" onAction="#backButtonHandler" prefHeight="34.0" prefWidth="123.0" text="Back" />
+      <TextField fx:id="nameField" layoutX="125.0" layoutY="562.0" prefHeight="27.0" prefWidth="817.0" promptText="Enter Customer Name" />
+      <TextField fx:id="address1Field" layoutX="125.0" layoutY="598.0" prefHeight="27.0" prefWidth="350.0" promptText="Enter Address 1" />
+      <TextField fx:id="address2Field" layoutX="125.0" layoutY="635.0" prefHeight="27.0" prefWidth="350.0" promptText="Enter Address 2" />
+      <TextField fx:id="cityField" layoutX="125.0" layoutY="673.0" prefHeight="27.0" prefWidth="350.0" promptText="Enter City" />
+      <Text layoutX="77.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+      <Text layoutX="54.0" layoutY="616.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address 1" />
+      <Text layoutX="53.0" layoutY="653.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address 2" />
+      <Text layoutX="90.0" layoutY="691.0" strokeType="OUTSIDE" strokeWidth="0.0" text="City" />
+      <TextField fx:id="countryField" layoutX="594.0" layoutY="598.0" prefHeight="27.0" prefWidth="350.0" promptText="Enter Country" />
+      <TextField fx:id="postalField" layoutX="594.0" layoutY="635.0" prefHeight="27.0" prefWidth="350.0" promptText="Enter Postal" />
+      <TextField fx:id="phoneField" layoutX="595.0" layoutY="673.0" prefHeight="27.0" prefWidth="350.0" promptText="Enter Phone number" />
+      <Text layoutX="534.0" layoutY="616.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Country" />
+      <Text layoutX="545.0" layoutY="653.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Postal" />
+      <Text layoutX="545.0" layoutY="691.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone" />
+      <Button blendMode="MULTIPLY" layoutX="860.0" layoutY="715.0" mnemonicParsing="false" onAction="#clearButtonHandler" prefHeight="31.0" prefWidth="135.0" text="Clear">
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>

@@ -8,7 +8,7 @@ import shawn_cheng.model.Customer;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CalendarControllerAbstract implements Initializable {
+public class CalendarControllerAbstract extends AbstractMainController implements Initializable {
 
     MainApp mainApp;
     public static Appointment selectedAppointment;

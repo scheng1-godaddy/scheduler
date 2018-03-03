@@ -29,7 +29,7 @@ public class ScreenDisplays {
         mainApp = mainapp;
     }
 
-    public static void displayMainMenu(MainApp mainApp) {
+    public static void displayMainMenu() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("views/MainScreen.fxml"));
@@ -47,9 +47,8 @@ public class ScreenDisplays {
 
     /**
      * Load login screen
-     * @param mainApp
      */
-    public static void displayLogin(MainApp mainApp) {
+    public static void displayLogin() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("views/LoginScreen.fxml"));

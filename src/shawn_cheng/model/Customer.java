@@ -1,6 +1,6 @@
 package shawn_cheng.model;
 
-import shawn_cheng.controller.AddModifyCustomerController;
+import shawn_cheng.controller.CustomerScreenController;
 
 public class Customer {
 
@@ -46,7 +46,7 @@ public class Customer {
         return "Customer ID: " + getCustomerID() + " Customer Name: " + getCustomerName();
     }
 
-    public static String validateInput(AddModifyCustomerController controller) {
+    public static String validateInput(CustomerScreenController controller) {
 
         System.out.println("Checking customer input");
         String errorMessage = "";

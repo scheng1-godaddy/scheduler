@@ -76,7 +76,8 @@ public class LoginScreenController implements Initializable {
             UserAccess userAccess = new UserAccess();
             if (userAccess.login(userName, password) != null) {
                 System.out.println("Logged in");
-                ScreenDisplays.displayMainMenu(this.mainApp);
+                //ScreenDisplays.displayMainMenu(this.mainApp);
+                ScreenDisplays.displayAppointmentsScreen();
             } else {
                 throw new InvalidLoginException("");
             }
