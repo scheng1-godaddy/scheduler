@@ -24,16 +24,8 @@ import java.util.stream.Collectors;
 
 public class CalendarMonthlyScreenController extends AbstractCalendarController implements Initializable {
 
-    //private MainApp mainApp;
-
-    //private YearMonth selectedMonth;
-
     @FXML
     private Label monthLabel;
-
-
-
-    //private ObservableList<Appointment> calendarAppointments = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -95,7 +87,7 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
      * GridPane that represents the calendar. At each cell it will call the getDailyPane method
      * to retrieve a Border Pane containing the appointment information that will be added to the grid.
      */
-    /*
+    @Override
     public void displayCalendar() {
 
         viewingWeeklyCalendar = false;
@@ -158,7 +150,7 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
             }
         }
     }
-    */
+
 
 
     /**
@@ -168,8 +160,8 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
      * @return dailyBorderPane
      */
 
-    /*
 
+    @Override
     public BorderPane getDailyPane (LocalDate currentDate) {
         // Make the Border Pane that will contain the day of month and appointment info
         BorderPane dailyBorderPane = new BorderPane();
@@ -199,7 +191,5 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
 
         return dailyBorderPane;
     }
-
-    */
 
 }

@@ -24,7 +24,7 @@ import java.time.YearMonth;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class AbstractCalendarController extends AbstractMainController implements Initializable {
+public abstract class AbstractCalendarController extends AbstractMainController implements Initializable {
 
     MainApp mainApp;
 
@@ -85,8 +85,10 @@ public class AbstractCalendarController extends AbstractMainController implement
         }
     }
 
-    public void displayCalendar() {
-
+    public abstract void displayCalendar();
+    /*
+    {
+        /*
         viewingWeeklyCalendar = false;
 
         selectedAppointment = null;
@@ -146,9 +148,13 @@ public class AbstractCalendarController extends AbstractMainController implement
                 currDate = currDate.plusDays(1);
             }
         }
-    }
 
-    public BorderPane getDailyPane (LocalDate currentDate) {
+    }
+    */
+
+    public abstract BorderPane getDailyPane (LocalDate currentDate);
+    /*
+    {
         // Make the Border Pane that will contain the day of month and appointment info
         BorderPane dailyBorderPane = new BorderPane();
 
@@ -177,4 +183,5 @@ public class AbstractCalendarController extends AbstractMainController implement
 
         return dailyBorderPane;
     }
+    */
 }
