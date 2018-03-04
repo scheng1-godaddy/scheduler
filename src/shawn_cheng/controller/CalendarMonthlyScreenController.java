@@ -11,11 +11,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import shawn_cheng.MainApp;
+import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.model.Appointment;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -39,7 +41,7 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
         // Get current month
         this.selectedMonth = YearMonth.now();
         // Display the calendar
-        this.calendarAppointments = createAppointmentsList();
+        //this.calendarAppointments = createAppointmentsList();
         displayMonthLabel();
         displayCalendar();
     }
@@ -58,16 +60,6 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
      */
     @FXML
     void deleteHandler(ActionEvent event) {
-
-    }
-
-    /**
-     * Handler to modify selected appointment.
-     * @param event
-     */
-    @FXML
-    void modifyHandler(ActionEvent event) {
-        System.out.println("The selected customer is: " + selectedAppointment);
 
     }
 
@@ -122,6 +114,12 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
 
         // Clear what's currently on the grid
         calendarGrid.getChildren().clear();
+
+        // Get appointments from db
+        LocalDateTime startDatetime = LocalDateTime.of(selectedMonth.atDay(1), LocalTime.MIDNIGHT);
+        LocalDateTime endDatetime = LocalDateTime.of(selectedMonth.atEndOfMonth(), LocalTime.MIDNIGHT);
+        AppointmentAccess appointmentAccess = new AppointmentAccess();
+        this.calendarAppointments = appointmentAccess.getAppointmentsSubset(startDatetime, endDatetime);
 
         // Set variables
         LocalDate firstDayofMonth = selectedMonth.atDay(1);

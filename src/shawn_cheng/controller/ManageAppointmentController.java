@@ -10,12 +10,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import shawn_cheng.MainApp;
+import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.access.CustomerAccess;
+import shawn_cheng.exceptions.InvalidInputException;
 import shawn_cheng.model.Appointment;
 import shawn_cheng.model.Customer;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -24,31 +27,31 @@ import java.util.ResourceBundle;
 public class ManageAppointmentController extends AbstractMainController implements Initializable {
 
     @FXML
-    private ComboBox<Customer> customerField;
+    public ComboBox<Customer> customerField;
 
     @FXML
-    private TextField contactField;
+    public TextField contactField;
 
     @FXML
-    private TextField titleField;
+    public TextField titleField;
 
     @FXML
-    private TextField locationField;
+    public TextField locationField;
 
     @FXML
-    private ComboBox<String> descriptionField;
+    public ComboBox<String> descriptionField;
 
     @FXML
-    private TextField urlField;
+    public TextField urlField;
 
     @FXML
-    private ComboBox<String> startTimeField;
+    public ComboBox<String> startTimeField;
 
     @FXML
-    private ComboBox<String> endTimeField;
+    public ComboBox<String> endTimeField;
 
     @FXML
-    private DatePicker dateField;
+    public DatePicker dateField;
 
     MainApp mainApp;
 
@@ -79,30 +82,77 @@ public class ManageAppointmentController extends AbstractMainController implemen
         this.descriptionField.setItems(this.appointmentTypes);
         this.customerField.setItems(this.customerList);
 
-        if (modify) {
-            // Its a modify, populate fields with selected appointment
-        } else {
-            // Not a modify, populate with default values
-            // Set current date to the date field.
-            this.dateField.setValue(LocalDate.now());
-        }
+
+        // Set current date to the date field.
+        this.dateField.setValue(LocalDate.now());
     }
 
     @FXML
     void cancelButtonHandler(ActionEvent event) {
         //Bring them back to the appointments calendar
-        ScreenDisplays.displayMonthlyCalendarScreen();
+        if (!AbstractCalendarController.viewingWeeklyCalendar) {
+            ScreenDisplays.displayMonthlyCalendarScreen();
+        } else {
+            //Display the weekly calendar
+        }
+
     }
 
 
     @FXML
-    void saveButtonHandler(ActionEvent event) {
+    void saveButtonHandler(ActionEvent event) throws InvalidInputException {
+        String errorMsg = Appointment.validateInput(this);
+        if (errorMsg.length() > 0) {
+            // Errors detected, throw exception
+            throw new InvalidInputException(errorMsg);
 
+        } else {
+            // No errors, proceed with creating appointment object
+            System.out.println("Appointment data validated");
+
+            // Going to need to validate availability
+
+            // For now, lets just add it to the database.
+
+            // Create the proper time datetime objects from String values
+            LocalDateTime startDateTime = LocalDateTime.of(this.dateField.getValue(), LocalTime.parse(this.startTimeField.getValue(), apptTimeFormat));
+            LocalDateTime endDateTime = LocalDateTime.of(this.dateField.getValue(), LocalTime.parse(this.endTimeField.getValue(), apptTimeFormat));
+
+            // Building appointment object now
+            Appointment newAppt = new Appointment();
+            newAppt.setTitle(this.titleField.getText());
+            newAppt.setDescription(this.descriptionField.getValue());
+            newAppt.setCustomer(this.customerField.getValue());
+            newAppt.setContact(this.contactField.getText());
+            newAppt.setLocation(this.locationField.getText());
+            newAppt.setUrl(this.urlField.getText());
+            newAppt.setStartDateTime(startDateTime);
+            newAppt.setEndDateTime(endDateTime);
+
+            // Create DB access object for appointment table
+            AppointmentAccess appointmentAccess = new AppointmentAccess();
+
+            // Add appointment
+            int apptId = appointmentAccess.addAppointment(newAppt);
+            newAppt.setAppointmentId(apptId);
+
+            if (AbstractCalendarController.viewingWeeklyCalendar) {
+                // Display weekly calendar
+            } else {
+                ScreenDisplays.displayMonthlyCalendarScreen();
+            }
+        }
     }
 
     public void setMainApp(MainApp mainApp) {this.mainApp = mainApp;}
 
-    public void setModify(boolean modify) {this.modify = modify;}
+    public void setModify(boolean modify) {
+        this.modify = modify;
+        if (modify) {
+            this.titleField.setText(selectedAppointment.getTitle());
+            this.customerField.setValue(selectedAppointment.getCustomer());
+        }
+    }
 
     // Create list of appointment times for the drop down
     private void createDropDownList(){

@@ -1,5 +1,7 @@
 package shawn_cheng.model;
 
+import shawn_cheng.controller.ManageAppointmentController;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -97,5 +99,30 @@ public class Appointment {
     @Override
     public String toString() {
         return this.title;
+    }
+
+    public static String validateInput(ManageAppointmentController controller) {
+        System.out.println("Checking Appointment input");
+        String errorMessage = "";
+
+        if (controller.titleField.getText().equals("")) {
+            errorMessage += "Invalid title\n";
+        }
+        if (controller.descriptionField.getValue() == null || controller.descriptionField.getValue().equals("")) {
+            errorMessage += "Invalid description\n";
+        }
+        if (controller.customerField.getValue() == null || controller.customerField.getValue().equals("")) {
+            errorMessage += "Invalid customer\n";
+        }
+        if (controller.startTimeField.getValue() == null) {
+            errorMessage += "Invalid start time\n";
+        }
+        if (controller.endTimeField.getValue() == null) {
+            errorMessage += "Invalid end time\n";
+        }
+        if (controller.dateField.getValue() == null) {
+            errorMessage += "Invalid date";
+        }
+        return errorMessage;
     }
 }

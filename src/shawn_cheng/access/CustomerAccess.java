@@ -39,6 +39,27 @@ public class CustomerAccess {
         return customers;
     }
 
+    public Customer getCustomer(int customerID) {
+        String query = "SELECT * FROM customer WHERE customerId = ?";
+        Customer customer = new Customer();
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            System.out.println("Executing query to retrieve customer with ID: " + customerID);
+            if (rs.next()) {
+                customer.setCustomerName(rs.getString("customerName"));
+                customer.setCustomerID(rs.getInt("customerId"));
+                customer.setActive(rs.getInt("active"));
+                AddressAccess address = new AddressAccess();
+                customer.setAddress(address.getAddress(rs.getInt("addressId")));
+            }
+        } catch(SQLException ex){
+            System.out.println(ex.getMessage());
+        }
+        return customer;
+    }
+
     public int addCustomer(Customer customer) {
         System.out.println("addCustomer in CustomerAccess called");
         String query = "INSERT INTO customer " +
