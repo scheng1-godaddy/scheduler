@@ -45,6 +45,7 @@ public class CustomerAccess {
 
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, customerID);
             ResultSet rs = stmt.executeQuery();
             System.out.println("Executing query to retrieve customer with ID: " + customerID);
             if (rs.next()) {

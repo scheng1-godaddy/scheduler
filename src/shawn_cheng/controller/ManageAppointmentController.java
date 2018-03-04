@@ -132,9 +132,15 @@ public class ManageAppointmentController extends AbstractMainController implemen
             // Create DB access object for appointment table
             AppointmentAccess appointmentAccess = new AppointmentAccess();
 
-            // Add appointment
-            int apptId = appointmentAccess.addAppointment(newAppt);
-            newAppt.setAppointmentId(apptId);
+            // If modifying an appointment, then update. If not, then add.
+            if (modify) {
+                newAppt.setAppointmentId(selectedAppointment.getAppointmentId());
+                appointmentAccess.updateAppointment(newAppt);
+            } else {
+                int apptId = appointmentAccess.addAppointment(newAppt);
+                newAppt.setAppointmentId(apptId);
+            }
+
 
             if (AbstractCalendarController.viewingWeeklyCalendar) {
                 // Display weekly calendar
@@ -150,7 +156,19 @@ public class ManageAppointmentController extends AbstractMainController implemen
         this.modify = modify;
         if (modify) {
             this.titleField.setText(selectedAppointment.getTitle());
-            this.customerField.setValue(selectedAppointment.getCustomer());
+            //this.customerField.setValue(selectedAppointment.getCustomer());
+            this.customerField.getSelectionModel().select(selectedAppointment.getCustomer());
+            System.out.println("Customer is: " + selectedAppointment.getCustomer());
+            this.descriptionField.setValue(selectedAppointment.getDescription());
+            this.contactField.setText(selectedAppointment.getContact());
+            this.locationField.setText(selectedAppointment.getLocation());
+            this.urlField.setText(selectedAppointment.getUrl());
+            this.dateField.setValue(selectedAppointment.getStartDateTime().toLocalDate());
+            this.startTimeField.getSelectionModel().select(selectedAppointment.getStartDateTime().format(apptTimeFormat));
+            this.endTimeField.getSelectionModel().select(selectedAppointment.getStartDateTime().format(apptTimeFormat));
+            //this.startTimeField.setValue(selectedAppointment.getStartDateTime().toString());
+            //this.endTimeField.setValue(selectedAppointment.getEndDateTime().toString());
+
         }
     }
 

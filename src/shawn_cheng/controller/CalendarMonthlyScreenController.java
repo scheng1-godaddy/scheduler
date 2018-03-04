@@ -164,40 +164,11 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
                 }
 
                 // Increment the current day
-                System.out.println("The current date label is: " + currDate.getDayOfMonth());
                 currDate = currDate.plusDays(1);
             }
         }
     }
 
-    // This is for testing, remove
-    public ObservableList<Appointment> createAppointmentsList() {
-        // Create appt1
-        Appointment appt1 = new Appointment();
-        appt1.setTitle("Appt Today");
-        appt1.setAppointmentId(1);
-        appt1.setContact("My Contact");
-        appt1.setDescription("A test description");
-        appt1.setLocation("A test location");
-        appt1.setUrl("http://test.com");
-        appt1.setStartDateTime(LocalDateTime.now());
-        appt1.setEndDateTime(LocalDateTime.now().plusHours(1));
-
-        // Create appt2
-        Appointment appt2 = new Appointment();
-        appt2.setTitle("Appt Next Month");
-        appt2.setAppointmentId(2);
-        appt2.setContact("My Contact 2");
-        appt2.setDescription("A test description 2");
-        appt2.setLocation("A test location 2");
-        appt2.setUrl("http://test2.com");
-        appt2.setStartDateTime(LocalDateTime.now().plusMonths(1));
-        appt2.setEndDateTime(LocalDateTime.now().plusMonths(1).plusHours(1));
-
-        this.calendarAppointments.add(appt1);
-        this.calendarAppointments.add(appt2);
-        return calendarAppointments;
-    }
 
     /**
      * This method generates the BorderPane node that contains both the day of month label

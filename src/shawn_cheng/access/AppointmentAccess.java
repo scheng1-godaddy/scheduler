@@ -164,4 +164,35 @@ public class AppointmentAccess {
         System.out.println("Appointment ID is: " + (id + 1));
         return id + 1;
     }
+
+    public void updateAppointment(Appointment appointment) {
+        String query = "UPDATE appointment " +
+                "SET customerId=?, title=?, description=?, location=?, " +
+                "contact=?, url=?, start=?, end=?, lastUpdate=NOW(), lastUpdateBy=? " +
+                "WHERE appointmentId = ?";
+
+        // Convert times to UTC
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDateTime startUTC = appointment.getStartDateTime()
+                .atZone(zone).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+        LocalDateTime endUTC = appointment.getEndDateTime()
+                .atZone(zone).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, appointment.getCustomer().getCustomerID());
+            stmt.setString(2, appointment.getTitle());
+            stmt.setString(3, appointment.getDescription());
+            stmt.setString(4, appointment.getLocation());
+            stmt.setString(5, appointment.getContact());
+            stmt.setString(6, appointment.getUrl());
+            stmt.setTimestamp(7, Timestamp.valueOf(startUTC));
+            stmt.setTimestamp(8, Timestamp.valueOf(endUTC));
+            stmt.setString(9, MainApp.userName);
+            stmt.setInt(10, appointment.getAppointmentId());
+            stmt.executeUpdate();
+        } catch(SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 }
