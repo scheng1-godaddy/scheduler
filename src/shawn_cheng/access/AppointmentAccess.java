@@ -195,4 +195,15 @@ public class AppointmentAccess {
             System.out.println(ex.getMessage());
         }
     }
+
+    public void removeAppointment(Appointment appointment) {
+        String query = "DELETE FROM appointment WHERE appointmentId = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, appointment.getAppointmentId());
+            stmt.executeUpdate();
+        } catch(SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 }

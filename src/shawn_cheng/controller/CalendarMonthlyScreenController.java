@@ -24,24 +24,22 @@ import java.util.stream.Collectors;
 
 public class CalendarMonthlyScreenController extends AbstractCalendarController implements Initializable {
 
-    private MainApp mainApp;
+    //private MainApp mainApp;
 
-    private YearMonth selectedMonth;
+    //private YearMonth selectedMonth;
 
     @FXML
     private Label monthLabel;
 
-    @FXML
-    private GridPane calendarGrid;
 
-    private ObservableList<Appointment> calendarAppointments = FXCollections.observableArrayList();
+
+    //private ObservableList<Appointment> calendarAppointments = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Get current month
         this.selectedMonth = YearMonth.now();
         // Display the calendar
-        //this.calendarAppointments = createAppointmentsList();
         displayMonthLabel();
         displayCalendar();
     }
@@ -52,15 +50,6 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
-    }
-
-    /**
-     * Handler to delete selected appointment.
-     * @param event
-     */
-    @FXML
-    void deleteHandler(ActionEvent event) {
-
     }
 
     /**
@@ -106,6 +95,7 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
      * GridPane that represents the calendar. At each cell it will call the getDailyPane method
      * to retrieve a Border Pane containing the appointment information that will be added to the grid.
      */
+    /*
     public void displayCalendar() {
 
         viewingWeeklyCalendar = false;
@@ -168,6 +158,7 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
             }
         }
     }
+    */
 
 
     /**
@@ -176,6 +167,9 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
      * @param currentDate
      * @return dailyBorderPane
      */
+
+    /*
+
     public BorderPane getDailyPane (LocalDate currentDate) {
         // Make the Border Pane that will contain the day of month and appointment info
         BorderPane dailyBorderPane = new BorderPane();
@@ -205,5 +199,7 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
 
         return dailyBorderPane;
     }
+
+    */
 
 }
