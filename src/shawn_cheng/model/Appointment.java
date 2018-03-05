@@ -1,10 +1,14 @@
 package shawn_cheng.model;
 
+import javafx.collections.ObservableList;
+import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.controller.ManageAppointmentController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class Appointment {
     private int appointmentId;
@@ -17,6 +21,7 @@ public class Appointment {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private final LocalDateTime endOfDayLocalDateTime;
+    private static final DateTimeFormatter timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
 
     public Appointment () {
         LocalTime midnight = LocalTime.MIDNIGHT;
@@ -102,7 +107,7 @@ public class Appointment {
     }
 
     public static String validateInput(ManageAppointmentController controller) {
-        System.out.println("Checking Appointment input");
+        System.out.println("Checking appointment input");
         String errorMessage = "";
 
         if (controller.titleField.getText().equals("")) {
@@ -124,5 +129,35 @@ public class Appointment {
             errorMessage += "Invalid date";
         }
         return errorMessage;
+    }
+
+    public static String validateTimes(ManageAppointmentController controller) {
+        System.out.println("Validating appointment times");
+        String errorMsg = "";
+        LocalDate selectedDate = controller.dateField.getValue();
+        LocalTime selectedStartTime = LocalTime.parse(controller.startTimeField.getValue(), timeFormat);
+        LocalTime selectedEndTime = LocalTime.parse(controller.endTimeField.getValue(), timeFormat);
+        LocalDateTime selectedStartDateTime = LocalDateTime.of(selectedDate, selectedStartTime);
+        LocalDateTime selectedEndDateTime = LocalDateTime.of(selectedDate, selectedEndTime);
+        int dayOfWeek = selectedDate.getDayOfWeek().getValue();
+
+        System.out.println("Appointment day of week is: " + dayOfWeek);
+        // Check if business day (Monday - Friday)
+        if (dayOfWeek == 7 || dayOfWeek == 6) {
+            errorMsg += "Appointments can only be scheduled on business days\n";
+        }
+
+        // Check if end time is greater then start time
+        if (selectedEndTime.isBefore(selectedStartTime) || selectedEndTime.equals(selectedStartTime)) {
+            errorMsg += "Appointment end time must be later then the start time\n";
+        }
+
+        // Check for overlapping appointments
+        AppointmentAccess appointmentAccess = new AppointmentAccess();
+        ObservableList<Appointment> appointments = appointmentAccess.getAppointmentOverlaps(selectedStartDateTime, selectedEndDateTime);
+        if (!appointments.isEmpty()) {
+            errorMsg += "There is overlapping appointments, choose another time";
+        }
+        return errorMsg;
     }
 }

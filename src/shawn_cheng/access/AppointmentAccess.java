@@ -64,7 +64,8 @@ public class AppointmentAccess {
 
         String query = "SELECT * FROM appointment AS a JOIN customer AS c " +
                 "ON a.customerId = c.customerId " +
-                "WHERE a.start >= ? AND a.end <= ? AND c.active = 1";
+                "WHERE a.start >= ? AND a.end <= ? AND a.createdBy = ? AND c.active = 1 " +
+                "ORDER BY a.start";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -74,6 +75,7 @@ public class AppointmentAccess {
             LocalDateTime endDatetimeParam = endTime.atZone(zone).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
             stmt.setTimestamp(1, Timestamp.valueOf(startDatetimeParam));
             stmt.setTimestamp(2, Timestamp.valueOf(endDatetimeParam));
+            stmt.setString(3, MainApp.userName);
             System.out.println("Executing the following query: " + stmt);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -205,5 +207,76 @@ public class AppointmentAccess {
         } catch(SQLException ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    public ObservableList<Appointment> getAppointmentOverlaps(LocalDateTime startTime, LocalDateTime endTime) {
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+
+        /*
+        String query = "SELECT * FROM appointment AS a " +
+                "JOIN customer AS c " +
+                "ON a.customerId = c.customerId " +
+                "WHERE (a.start > ? AND a.end < ?) " +
+                "OR (a.start < ? AND a.end > ?) " +
+                "OR (a.start BETWEEN ? AND ? OR a.end BETWEEN ? AND ?) " +
+                "AND c.active = 1 AND a.createdBy=?";
+        */
+
+        // Note on the query below: In concept of overlapping times, I wanted the user to be able to schedule an appointment
+        // to start when an existing appointment is ending. For example, if I have an existing appointment from 9:30 to 10:30;
+        // I should be able to schedule an appointment that starts at 10:30. That's why I couldn't use 'between' since its inclusive.
+        String query = "SELECT * FROM appointment AS a " +
+                "JOIN customer AS c " +
+                "ON a.customerId = c.customerId " +
+                "WHERE (? > a.start AND ? < a.end) " +
+                "OR (? > a.start AND ? < a.end) " +
+                "OR ? = a.start " +
+                "OR ? = a.end " +
+                "AND c.active = 1 AND a.createdBy=?";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            //Convert to UTC time first
+            ZoneId zone = ZoneId.systemDefault();
+            LocalDateTime startDatetime = startTime.atZone(zone).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+            LocalDateTime endDatetime = endTime.atZone(zone).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+            stmt.setTimestamp(1, Timestamp.valueOf(startDatetime));
+            stmt.setTimestamp(2, Timestamp.valueOf(startDatetime));
+            stmt.setTimestamp(3, Timestamp.valueOf(endDatetime));
+            stmt.setTimestamp(4, Timestamp.valueOf(endDatetime));
+            stmt.setTimestamp(5, Timestamp.valueOf(startDatetime));
+            stmt.setTimestamp(6, Timestamp.valueOf(endDatetime));
+            stmt.setString(7, MainApp.userName);
+            System.out.println("Executing the following query: " + stmt);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Appointment appt = new Appointment();
+                appt.setAppointmentId(rs.getInt("appointmentId"));
+                appt.setTitle(rs.getString("title"));
+                appt.setDescription(rs.getString("description"));
+                appt.setLocation(rs.getString("location"));
+                appt.setContact(rs.getString("contact"));
+                appt.setUrl(rs.getString("url"));
+
+                LocalDateTime startUTC = rs.getTimestamp("start").toLocalDateTime();
+                LocalDateTime endUTC = rs.getTimestamp("end").toLocalDateTime();
+                LocalDateTime startLocal = startUTC.atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
+                LocalDateTime endLocal = endUTC.atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
+
+                appt.setStartDateTime(startLocal);
+                appt.setEndDateTime(endLocal);
+
+                CustomerAccess customerAccess = new CustomerAccess();
+                appt.setCustomer(customerAccess.getCustomer(rs.getInt("customerId")));
+
+                appointments.add(appt);
+            }
+        } catch (SQLException e) {
+
+            System.out.println(e.getMessage());
+        }
+
+        return appointments;
     }
 }

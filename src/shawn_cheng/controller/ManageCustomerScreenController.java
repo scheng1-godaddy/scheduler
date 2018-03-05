@@ -86,6 +86,10 @@ public class ManageCustomerScreenController extends AbstractMainController imple
         cityColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCity().getCity()));
         countryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCity().getCountry().getCountry()));
         loadCustomerTable();
+        customerTableView.setOnMouseClicked(event -> {
+            selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
+            System.out.println("Customer clicked on was: " + selectedCustomer.getCustomerName());
+        });
     }
 
     @FXML

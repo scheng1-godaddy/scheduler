@@ -102,6 +102,8 @@ public class ManageAppointmentController extends AbstractMainController implemen
     @FXML
     void saveButtonHandler(ActionEvent event) throws InvalidInputException {
         String errorMsg = Appointment.validateInput(this);
+        errorMsg += Appointment.validateTimes(this);
+
         if (errorMsg.length() > 0) {
             // Errors detected, throw exception
             throw new InvalidInputException(errorMsg);
@@ -165,7 +167,7 @@ public class ManageAppointmentController extends AbstractMainController implemen
             this.urlField.setText(selectedAppointment.getUrl());
             this.dateField.setValue(selectedAppointment.getStartDateTime().toLocalDate());
             this.startTimeField.getSelectionModel().select(selectedAppointment.getStartDateTime().format(apptTimeFormat));
-            this.endTimeField.getSelectionModel().select(selectedAppointment.getStartDateTime().format(apptTimeFormat));
+            this.endTimeField.getSelectionModel().select(selectedAppointment.getEndDateTime().format(apptTimeFormat));
             //this.startTimeField.setValue(selectedAppointment.getStartDateTime().toString());
             //this.endTimeField.setValue(selectedAppointment.getEndDateTime().toString());
 

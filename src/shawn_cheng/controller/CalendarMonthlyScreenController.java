@@ -182,6 +182,11 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
         dailyApptListView.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldVal, newVal) -> selectedAppointment = newVal);
 
+        // Let user double click to get to modify screen (or just to view details).
+        dailyApptListView.setOnMouseClicked(event -> {if (event.getClickCount() == 2 && selectedAppointment != null) {
+            ScreenDisplays.displayAppointmentScreen(true);
+        }});
+
         // Attach day of month to the daily border pane
         dailyBorderPane.setTop(dayOfMonthLabel);
         BorderPane.setAlignment(dayOfMonthLabel, Pos.TOP_RIGHT);
