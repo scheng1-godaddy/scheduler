@@ -2,3 +2,17 @@
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
+
+.list-view .scroll-bar:vertical {
+    -fx-opacity: 0;
+    -fx-padding: -7;
+}
+
+.list-view .scroll-bar:horizontal{
+    -fx-padding: -5;
+}
+
+.grid-cell {
+    -fx-background-color: grey, white ;
+    -fx-background-insets: 0, 0 1 1 0 ;
+}

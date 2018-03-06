@@ -93,7 +93,7 @@ public class ManageAppointmentController extends AbstractMainController implemen
         if (!AbstractCalendarController.viewingWeeklyCalendar) {
             ScreenDisplays.displayMonthlyCalendarScreen();
         } else {
-            //Display the weekly calendar
+            ScreenDisplays.displayWeeklyCalendarScreen();
         }
 
     }
@@ -102,7 +102,11 @@ public class ManageAppointmentController extends AbstractMainController implemen
     @FXML
     void saveButtonHandler(ActionEvent event) throws InvalidInputException {
         String errorMsg = Appointment.validateInput(this);
-        errorMsg += Appointment.validateTimes(this);
+        if (errorMsg.length() > 0) {
+            // Errors detected, throw exception
+            throw new InvalidInputException(errorMsg);
+        }
+        errorMsg = Appointment.validateTimes(this);
 
         if (errorMsg.length() > 0) {
             // Errors detected, throw exception
@@ -111,10 +115,6 @@ public class ManageAppointmentController extends AbstractMainController implemen
         } else {
             // No errors, proceed with creating appointment object
             System.out.println("Appointment data validated");
-
-            // Going to need to validate availability
-
-            // For now, lets just add it to the database.
 
             // Create the proper time datetime objects from String values
             LocalDateTime startDateTime = LocalDateTime.of(this.dateField.getValue(), LocalTime.parse(this.startTimeField.getValue(), apptTimeFormat));
@@ -145,7 +145,7 @@ public class ManageAppointmentController extends AbstractMainController implemen
 
 
             if (AbstractCalendarController.viewingWeeklyCalendar) {
-                // Display weekly calendar
+                ScreenDisplays.displayWeeklyCalendarScreen();
             } else {
                 ScreenDisplays.displayMonthlyCalendarScreen();
             }
@@ -158,7 +158,6 @@ public class ManageAppointmentController extends AbstractMainController implemen
         this.modify = modify;
         if (modify) {
             this.titleField.setText(selectedAppointment.getTitle());
-            //this.customerField.setValue(selectedAppointment.getCustomer());
             this.customerField.getSelectionModel().select(selectedAppointment.getCustomer());
             System.out.println("Customer is: " + selectedAppointment.getCustomer());
             this.descriptionField.setValue(selectedAppointment.getDescription());
@@ -168,8 +167,6 @@ public class ManageAppointmentController extends AbstractMainController implemen
             this.dateField.setValue(selectedAppointment.getStartDateTime().toLocalDate());
             this.startTimeField.getSelectionModel().select(selectedAppointment.getStartDateTime().format(apptTimeFormat));
             this.endTimeField.getSelectionModel().select(selectedAppointment.getEndDateTime().format(apptTimeFormat));
-            //this.startTimeField.setValue(selectedAppointment.getStartDateTime().toString());
-            //this.endTimeField.setValue(selectedAppointment.getEndDateTime().toString());
 
         }
     }

@@ -72,6 +72,7 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
      */
     @FXML
     void weeklyViewHandler(ActionEvent event) {
+        ScreenDisplays.displayWeeklyCalendarScreen();
 
     }
 

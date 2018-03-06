@@ -5,42 +5,77 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import shawn_cheng.MainApp;
+import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.model.Appointment;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
+import java.text.DateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class CalendarWeeklyScreenController extends AbstractCalendarController implements Initializable {
 
-    private MainApp mainApp;
 
-    private YearMonth selectedMonth;
-
-    @FXML
-    private Label monthLabel;
+    private LocalDate selectedWeek;
 
     @FXML
     private GridPane calendarGrid;
 
+    @FXML
+    private Label dateLabelSunday;
+
+    @FXML
+    private Label dateLabelMonday;
+
+    @FXML
+    private Label dateLabelTuesday;
+
+    @FXML
+    private Label dateLabelWednesday;
+
+    @FXML
+    private Label dateLabelThursday;
+
+    @FXML
+    private Label dateLabelFriday;
+
+    @FXML
+    private Label dateLabelSaturday;
+
+    @FXML
+    private Label weekLabel;
+
+
     private ObservableList<Appointment> calendarAppointments = FXCollections.observableArrayList();
+
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Get current month
-        this.selectedMonth = YearMonth.now();
+        // Get current week
+        // Start with todays date
+        LocalDate today = LocalDate.now();
+        int dayOfWeek = today.getDayOfWeek().getValue();
+        // Selected week should be the Sunday of that week
+        if (dayOfWeek == 7) {
+            this.selectedWeek = today;
+        } else {
+            this.selectedWeek = today.minusDays(dayOfWeek);
+        }
+
         // Display the calendar
-        this.calendarAppointments = createAppointmentsList();
-        displayMonthLabel();
         displayCalendar();
     }
 
@@ -71,42 +106,44 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
 
     }
 
-    /**
-     * Switches to next month
-     * @param event
-     */
+
     @FXML
-    void nextMonthHandler(ActionEvent event) {
-        selectedMonth = selectedMonth.plusMonths(1);
-        displayMonthLabel();
+    void nextWeekHandler(ActionEvent event) {
+        selectedWeek = selectedWeek.plusWeeks(1);
         displayCalendar();
     }
 
-    /**
-     * Switches to the previous month
-     * @param event
-     */
     @FXML
-    void previousMonthHandler(ActionEvent event) {
-        selectedMonth = selectedMonth.minusMonths(1);
-        displayMonthLabel();
+    void previousWeekHandler(ActionEvent event) {
+        selectedWeek = selectedWeek.minusWeeks(1);
         displayCalendar();
-    }
 
+    }
     /**
      * Switches to the weekly view of the calendar.
      * @param event
      */
     @FXML
-    void weeklyViewHandler(ActionEvent event) {
-
+    void monthlyViewHandler(ActionEvent event) {
+        ScreenDisplays.displayMonthlyCalendarScreen();
     }
 
     /**
      * Displays the month based on the currently selected month.
      */
-    public void displayMonthLabel() {
-        this.monthLabel.setText(this.selectedMonth.getMonth().name() + " " + selectedMonth.getYear());
+    public void displayWeekLabel() {
+
+        // Display date range on header
+        this.weekLabel.setText(this.selectedWeek.format(dateFormatter) + " - " + this.selectedWeek.plusDays(6).format(dateFormatter));
+
+        // Display dates above columns
+        this.dateLabelSunday.setText(this.selectedWeek.format(dateFormatter));
+        this.dateLabelMonday.setText(this.selectedWeek.plusDays(1).format(dateFormatter));
+        this.dateLabelTuesday.setText(this.selectedWeek.plusDays(2).format(dateFormatter));
+        this.dateLabelWednesday.setText(this.selectedWeek.plusDays(3).format(dateFormatter));
+        this.dateLabelThursday.setText(this.selectedWeek.plusDays(4).format(dateFormatter));
+        this.dateLabelFriday.setText(this.selectedWeek.plusDays(5).format(dateFormatter));
+        this.dateLabelSaturday.setText(this.selectedWeek.plusDays(6).format(dateFormatter));
     }
 
     /**
@@ -116,6 +153,8 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
      */
     public void displayCalendar() {
 
+        displayWeekLabel();
+
         viewingWeeklyCalendar = true;
 
         selectedAppointment = null;
@@ -123,82 +162,89 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
         // Clear what's currently on the grid
         calendarGrid.getChildren().clear();
 
-        // Set variables
-        LocalDate firstDayofMonth = selectedMonth.atDay(1);
-        int lengthOfMonth = selectedMonth.lengthOfMonth();
-        int dayOfWeek = firstDayofMonth.getDayOfWeek().getValue();
+        // Display the grid lines.
+        insertPanes();
 
-        System.out.println("Length of current month is: " + lengthOfMonth);
-        System.out.println("Day of week for first day is: " + dayOfWeek);
+        // Display the time column
+        populateTimeLabels();
 
-        // Start with the first day of the month
-        LocalDate currDate = firstDayofMonth;
+        // Get appointments from db
+        LocalDateTime startDatetime = LocalDateTime.of(selectedWeek, LocalTime.MIDNIGHT);
+        LocalDateTime endDatetime = LocalDateTime.of(selectedWeek.plusDays(6), LocalTime.MIDNIGHT);
+        AppointmentAccess appointmentAccess = new AppointmentAccess();
+        this.calendarAppointments = appointmentAccess.getAppointmentsSubset(startDatetime, endDatetime);
+        System.out.println("looping through appointments");
 
-        // Find the last day of the month
-        LocalDate lastDayOfMonth = firstDayofMonth.plusDays(lengthOfMonth-1);
-        System.out.println("Last day of the month is: " + lastDayOfMonth.toString());
+        // Loop through appointments retrieved for the week.
+        for (Appointment appt : calendarAppointments) {
 
-        // Nested loops to populate the grid/calendar
-        OUTER: for (int rowIndex = 0; rowIndex <= 4; rowIndex++) {
-            for (int colIndex = 0; colIndex<=6; colIndex++) {
+            System.out.println("Checking appointment: " + appt.getTitle());
+            LocalDateTime curApptStartTime = appt.getStartDateTime();
 
-                // If first day of the month, put it on the correct day of week
-                if (currDate.getDayOfMonth() == 1) {
-                    colIndex = dayOfWeek;
+            // We can get the column value based on what day of week
+            int colIndex = curApptStartTime.getDayOfWeek().getValue() + 1;
+            System.out.println("colIndex is :" + colIndex);
 
-                    // Since day of week goes from 1 to 7 and grid goes from 0 to 6, place 7 to 0
-                    if (dayOfWeek == 7) {
-                        colIndex = 0;
-                    }
-
+            // Perform a loop to get the row value (based on start time of appt)
+            int rowIndex = 0;
+            LocalTime curTime = LocalTime.of(9, 0);
+            LocalTime apptTime = LocalTime.of(curApptStartTime.getHour(), curApptStartTime.getMinute());
+            for (int x =0; x <= 15; x++) {
+                if (curTime.equals(apptTime)) {
+                    break;
+                } else {
+                    rowIndex++;
                 }
+                curTime = curTime.plusMinutes(30);
+            }
+            System.out.println("rowIndex is: " + rowIndex);
+            ObservableList<Appointment> currentAppointment = FXCollections.observableArrayList();
+            currentAppointment.add(appt);
 
-                //Get daily BorderPane, which contains the appointments and the date label.
-                BorderPane bp = getDailyPane(currDate);
+            ListView<Appointment> currentApptListView = new ListView<>(currentAppointment);
+            currentApptListView.setEditable(false);
 
-                //Adding to the grid
-                calendarGrid.add(bp, colIndex, rowIndex);
+            currentApptListView.getSelectionModel().selectedItemProperty()
+                    .addListener((obs, oldVal, newVal) -> selectedAppointment = newVal);
 
-                // If last day, break out of the loop
-                if (currDate.equals(lastDayOfMonth)) {
-                    System.out.println("Current date is equal to the last date of the month, breaking loop");
-                    break OUTER;
-                }
+            currentApptListView.setOnMouseClicked(event -> {if (event.getClickCount() == 2 && selectedAppointment != null) {
+                ScreenDisplays.displayAppointmentScreen(true);
+            }});
 
-                // Increment the current day
-                System.out.println("The current date label is: " + currDate.getDayOfMonth());
-                currDate = currDate.plusDays(1);
+            System.out.println("Adding appointment to the weekly calendar");
+
+            // Determine how many rows we'll span based on the length of the appointment.
+            System.out.println("Start time is: " + appt.getStartDateTime().toLocalTime() + " End time is: " + appt.getEndDateTime().toLocalTime());
+            long apptLength = Duration.between(appt.getStartDateTime().toLocalTime(), appt.getEndDateTime().toLocalTime()).toMinutes();
+            System.out.println("Appointment length is: " + apptLength);
+            int rowSpan = (int) (apptLength/30);
+
+            calendarGrid.add(currentApptListView, colIndex, rowIndex, 1, rowSpan);
+        }
+    }
+
+    /**
+     * This is so I can apply CSS styling to show grid lines in each cell for the gridpane.
+     */
+    private void insertPanes() {
+        for (int colValue = 0; colValue <= 7; colValue++ ) {
+            for (int rowValue=0; rowValue <= 15; rowValue++) {
+                Pane pane = new Pane();
+                pane.getStyleClass().add("grid-cell");
+                calendarGrid.add(pane, colValue, rowValue);
             }
         }
     }
 
-    // This is for testing, remove
-    public ObservableList<Appointment> createAppointmentsList() {
-        // Create appt1
-        Appointment appt1 = new Appointment();
-        appt1.setTitle("Appt Today");
-        appt1.setAppointmentId(1);
-        appt1.setContact("My Contact");
-        appt1.setDescription("A test description");
-        appt1.setLocation("A test location");
-        appt1.setUrl("http://test.com");
-        appt1.setStartDateTime(LocalDateTime.now());
-        appt1.setEndDateTime(LocalDateTime.now().plusHours(1));
-
-        // Create appt2
-        Appointment appt2 = new Appointment();
-        appt2.setTitle("Appt Next Month");
-        appt2.setAppointmentId(2);
-        appt2.setContact("My Contact 2");
-        appt2.setDescription("A test description 2");
-        appt2.setLocation("A test location 2");
-        appt2.setUrl("http://test2.com");
-        appt2.setStartDateTime(LocalDateTime.now().plusMonths(1));
-        appt2.setEndDateTime(LocalDateTime.now().plusMonths(1).plusHours(1));
-
-        this.calendarAppointments.add(appt1);
-        this.calendarAppointments.add(appt2);
-        return calendarAppointments;
+    private void populateTimeLabels() {
+        LocalTime calTimes = LocalTime.of(9, 0);
+        for (int rowIndex = 0; rowIndex <= 15; rowIndex++) {
+            Label timeLabel = new Label();
+            timeLabel.setText(calTimes.toString());
+            calendarGrid.add(timeLabel, 0, rowIndex);
+            GridPane.setHalignment(timeLabel, HPos.CENTER);
+            calTimes = calTimes.plusMinutes(30);
+        }
     }
 
     /**

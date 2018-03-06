@@ -16,12 +16,10 @@ public class AppointmentAccess {
 
     public ObservableList<Appointment> getAllAppointments() {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-        String getAppointmentQuery = String.join(" ",
-                "SELECT * FROM appointment AS a",
-                "JOIN customer AS c",
-                "ON a.customerId = c.customerId",
-                "WHERE c.active = 1"
-        );
+        String getAppointmentQuery = "SELECT * FROM appointment AS a JOIN customer AS c " +
+                "ON a.customerId = c.customerId " +
+                "WHERE c.active = 1 " +
+                "ORDER BY a.start";
 
         try{
             PreparedStatement stmt = conn.prepareStatement(getAppointmentQuery);
@@ -211,16 +209,6 @@ public class AppointmentAccess {
 
     public ObservableList<Appointment> getAppointmentOverlaps(LocalDateTime startTime, LocalDateTime endTime) {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-
-        /*
-        String query = "SELECT * FROM appointment AS a " +
-                "JOIN customer AS c " +
-                "ON a.customerId = c.customerId " +
-                "WHERE (a.start > ? AND a.end < ?) " +
-                "OR (a.start < ? AND a.end > ?) " +
-                "OR (a.start BETWEEN ? AND ? OR a.end BETWEEN ? AND ?) " +
-                "AND c.active = 1 AND a.createdBy=?";
-        */
 
         // Note on the query below: In concept of overlapping times, I wanted the user to be able to schedule an appointment
         // to start when an existing appointment is ending. For example, if I have an existing appointment from 9:30 to 10:30;

@@ -64,25 +64,32 @@ public class LoginScreenController implements Initializable {
 
 
     @FXML
-    void submitButtonHandler(ActionEvent event) throws InvalidLoginException {
+    void submitButtonHandler(ActionEvent event)  {
         User newUser = new User();
         String userName = this.userNameInput.getText();
         String password = this.passWordInput.getText();
         MainApp.userName = userName;
         newUser.setUserName(userName);
         newUser.setPassWord(password);
-        if (newUser.validateUser()) {
-            System.out.println("Input validated, checking against database");
-            UserAccess userAccess = new UserAccess();
-            if (userAccess.login(userName, password) != null) {
-                System.out.println("Logged in");
-                //ScreenDisplays.displayMainMenu(this.mainApp);
-                ScreenDisplays.displayMonthlyCalendarScreen();
+        try {
+            if (newUser.validateUser()) {
+                System.out.println("Input validated, checking against database");
+                UserAccess userAccess = new UserAccess();
+                if (userAccess.login(userName, password) != null) {
+                    System.out.println("Logged in");
+                    ScreenDisplays.displayMonthlyCalendarScreen();
+                } else {
+                    throw new InvalidLoginException("");
+                }
             } else {
                 throw new InvalidLoginException("");
             }
-        } else {
-            throw new InvalidLoginException("");
+        } catch (InvalidLoginException e) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle(MainApp.rb.getString("invalid_login_title"));
+            alert.setHeaderText(MainApp.rb.getString("invalid_login_title"));
+            alert.setContentText(MainApp.rb.getString("invalid_login_text"));
+            alert.showAndWait().filter(response -> response == ButtonType.OK);;
         }
     }
 }

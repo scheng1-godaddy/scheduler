@@ -93,6 +93,23 @@ public class ScreenDisplays {
         }
     }
 
+    public static void displayWeeklyCalendarScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("views/CalendarWeeklyScreen.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            CalendarWeeklyScreenController controller = loader.getController();
+            controller.setMainApp(mainApp);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+            System.out.println("Displaying Weekly Calendar screen");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void displayAppointmentScreen(boolean modify) {
         try {
             FXMLLoader loader = new FXMLLoader();

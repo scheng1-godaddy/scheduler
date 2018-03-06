@@ -1,13 +1,14 @@
 package shawn_cheng.exceptions;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class InvalidInputException extends Exception {
     public InvalidInputException(String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Invalid Input");
         alert.setHeaderText("Invalid Input");
         alert.setContentText(msg);
-        alert.showAndWait();
+        alert.showAndWait().filter(response -> response == ButtonType.OK);;
     }
 }
