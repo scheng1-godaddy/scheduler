@@ -18,23 +18,12 @@ import shawn_cheng.model.User;
  * @author Shawn Cheng
  */
 public class LoginScreenController implements Initializable {
-    @FXML
-    private AnchorPane ap;
-
-    @FXML
-    private Button exitButton;
-
-    @FXML
-    private Label promptLabel;
 
     @FXML
     private TextField userNameInput;
 
     @FXML
     private TextField passWordInput;
-
-    @FXML
-    private Button submitButton;
 
     @FXML
     private Label userNameLabel;
@@ -45,12 +34,10 @@ public class LoginScreenController implements Initializable {
     @FXML
     private Label mainTitleLabel;
 
-    private MainApp mainApp;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) { }
 
-    public void setMainApp(MainApp mainapp) { this.mainApp = mainapp; }
 
     public void setText() {
         System.out.println("Resource Bundle is " + MainApp.rb);

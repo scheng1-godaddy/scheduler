@@ -9,7 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import shawn_cheng.MainApp;
 import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.access.CustomerAccess;
 import shawn_cheng.exceptions.InvalidInputException;
@@ -52,8 +51,6 @@ public class ManageAppointmentController extends AbstractMainController implemen
 
     @FXML
     public DatePicker dateField;
-
-    MainApp mainApp;
 
     private ObservableList<String> appointmentTimes;
 
@@ -151,8 +148,6 @@ public class ManageAppointmentController extends AbstractMainController implemen
             }
         }
     }
-
-    public void setMainApp(MainApp mainApp) {this.mainApp = mainApp;}
 
     public void setModify(boolean modify) {
         this.modify = modify;

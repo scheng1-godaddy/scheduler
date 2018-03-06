@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1000.0" stylesheets="@schedulerCSS.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shawn_cheng.controller.ReportsApptTypeController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#323232" height="90.0" layoutY="81.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Label alignment="CENTER" layoutY="87.0" prefHeight="81.0" prefWidth="1000.0" text="Reports" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bcbcbc" height="40.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Button blendMode="MULTIPLY" layoutX="183.0" layoutY="41.0" mnemonicParsing="false" onAction="#appointmentsButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Appointments" />
+      <Button blendMode="MULTIPLY" layoutX="342.0" layoutY="41.0" mnemonicParsing="false" onAction="#customersButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Customers" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#949494" height="40.0" layoutX="501.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="159.0" />
+      <Button blendMode="MULTIPLY" layoutX="501.0" layoutY="41.0" mnemonicParsing="false" onAction="#reportsButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Reports" />
+      <Button blendMode="MULTIPLY" layoutX="660.0" layoutY="41.0" mnemonicParsing="false" onAction="#exitButtonHandler" prefHeight="40.0" prefWidth="159.0" text="Exit" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#203451" height="42.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Text fill="WHITE" layoutX="356.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maddy's Scheduling Application">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <TableView fx:id="tableView" layoutX="274.0" layoutY="244.0" prefHeight="514.0" prefWidth="724.0">
+        <columns>
+          <TableColumn fx:id="columnCount" prefWidth="219.0" text="Count" />
+          <TableColumn fx:id="columnReportType" prefWidth="508.0" text="Report Type" />
+        </columns>
+      </TableView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bcbcbc" height="42.0" layoutY="170.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d5dfe8" height="549.0" layoutY="212.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="273.0" />
+      <Text layoutX="2.0" layoutY="198.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointment Types Per Month" textAlignment="CENTER" wrappingWidth="999.9999974370003">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Button layoutY="211.0" mnemonicParsing="false" onAction="#HandlerApptTypeButton" prefHeight="42.0" prefWidth="273.0" text="Appointment Types Per Month" />
+      <Button layoutY="253.0" mnemonicParsing="false" onAction="#HandlerConsultantSchedule" prefHeight="42.0" prefWidth="273.0" text="Consultant Schedule" />
+      <Button layoutY="295.0" mnemonicParsing="false" onAction="#HandlerHistoryPerCustomer" prefHeight="42.0" prefWidth="273.0" text="Appointment History per Customer" />
+      <Button layoutX="678.0" layoutY="214.0" mnemonicParsing="false" onAction="#HandlerRunReport" text="Run Report" />
+      <ComboBox fx:id="dropDown" layoutX="768.0" layoutY="214.0" prefHeight="27.0" prefWidth="227.0" promptText="Select Month" />
+   </children>
+</AnchorPane>

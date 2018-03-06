@@ -38,9 +38,6 @@ public class ScreenDisplays {
             Parent root = loader.load();
             Scene scene = new Scene(root);
             mainApp.primaryStage.setScene(scene);
-            LoginScreenController controller = loader.getController();
-            controller.setMainApp(mainApp);
-            controller.setText();
             mainApp.primaryStage.setResizable(false);
             mainApp.primaryStage.show();
             System.out.println("Displaying Login screen");
@@ -66,8 +63,6 @@ public class ScreenDisplays {
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
-            ManageCustomerScreenController controller = loader.getController();
-            controller.setMainApp(mainApp);
             primaryStage.setResizable(false);
             primaryStage.show();
             System.out.println("Displaying Customer screen");
@@ -83,8 +78,6 @@ public class ScreenDisplays {
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
-            CalendarMonthlyScreenController controller = loader.getController();
-            controller.setMainApp(mainApp);
             primaryStage.setResizable(false);
             primaryStage.show();
             System.out.println("Displaying Monthly Calendar screen");
@@ -100,8 +93,6 @@ public class ScreenDisplays {
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
-            CalendarWeeklyScreenController controller = loader.getController();
-            controller.setMainApp(mainApp);
             primaryStage.setResizable(false);
             primaryStage.show();
             System.out.println("Displaying Weekly Calendar screen");
@@ -119,7 +110,6 @@ public class ScreenDisplays {
             primaryStage.setScene(scene);
             ManageAppointmentController controller = loader.getController();
             controller.setModify(modify);
-            controller.setMainApp(mainApp);
             primaryStage.setResizable(false);
             primaryStage.show();
             System.out.println("Displaying Appointments screen");
@@ -128,4 +118,18 @@ public class ScreenDisplays {
         }
     }
 
+    public static void displayReportApptTypeScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("views/ReportsApptTypeScreen.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+            System.out.println("Displaying Reports: Appt Type screen");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

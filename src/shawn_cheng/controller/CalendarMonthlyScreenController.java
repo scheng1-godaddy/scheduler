@@ -9,8 +9,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import shawn_cheng.MainApp;
 import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.model.Appointment;
 
@@ -32,16 +30,7 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
         // Get current month
         this.selectedMonth = YearMonth.now();
         // Display the calendar
-        displayMonthLabel();
         displayCalendar();
-    }
-
-    /**
-     * Reference to mainApp object
-     * @param mainApp
-     */
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
     }
 
     /**
@@ -51,7 +40,6 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
     @FXML
     void nextMonthHandler(ActionEvent event) {
         selectedMonth = selectedMonth.plusMonths(1);
-        displayMonthLabel();
         displayCalendar();
     }
 
@@ -62,7 +50,6 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
     @FXML
     void previousMonthHandler(ActionEvent event) {
         selectedMonth = selectedMonth.minusMonths(1);
-        displayMonthLabel();
         displayCalendar();
     }
 
@@ -90,6 +77,8 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
      */
     @Override
     public void displayCalendar() {
+
+        displayMonthLabel();
 
         viewingWeeklyCalendar = false;
 

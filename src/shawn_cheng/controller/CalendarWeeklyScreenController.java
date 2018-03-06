@@ -12,7 +12,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import shawn_cheng.MainApp;
 import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.model.Appointment;
 
@@ -77,33 +76,6 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
 
         // Display the calendar
         displayCalendar();
-    }
-
-    /**
-     * Reference to mainApp object
-     * @param mainApp
-     */
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
-    }
-
-    /**
-     * Handler to delete selected appointment.
-     * @param event
-     */
-    @FXML
-    void deleteHandler(ActionEvent event) {
-
-    }
-
-    /**
-     * Handler to modify selected appointment.
-     * @param event
-     */
-    @FXML
-    void modifyHandler(ActionEvent event) {
-        System.out.println("The selected customer is: " + selectedAppointment);
-
     }
 
 
@@ -198,9 +170,12 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
                 curTime = curTime.plusMinutes(30);
             }
             System.out.println("rowIndex is: " + rowIndex);
+
+            // creating a list to populate the listview.
             ObservableList<Appointment> currentAppointment = FXCollections.observableArrayList();
             currentAppointment.add(appt);
 
+            // Create the ListView, this will
             ListView<Appointment> currentApptListView = new ListView<>(currentAppointment);
             currentApptListView.setEditable(false);
 

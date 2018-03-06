@@ -21,6 +21,6 @@ public class AbstractMainController {
 
     @FXML
     void reportsButtonHandler(ActionEvent event) {
-
+        ScreenDisplays.displayReportApptTypeScreen();
     }
 }
