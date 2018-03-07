@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import shawn_cheng.MainApp;
 import shawn_cheng.model.Appointment;
+import shawn_cheng.model.Customer;
 import shawn_cheng.model.ReportTypeCount;
 
 import java.sql.*;
@@ -344,6 +345,51 @@ public class AppointmentAccess {
                 // Get customer
                 CustomerAccess customer = new CustomerAccess();
                 apptResult.setCustomer(customer.getCustomer(rs.getInt("customerId")));
+
+                appointments.add(apptResult);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        return appointments;
+    }
+
+    public ObservableList<Appointment> getAppointmentCustomerHistory(Customer customer) {
+
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+
+        String query = "SELECT * FROM appointment AS a JOIN customer AS c " +
+                "ON a.customerId = c.customerId " +
+                "WHERE c.customerId = ? " +
+                "ORDER BY a.start";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, customer.getCustomerID());
+            System.out.println("Executing the following query: " + stmt);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Appointment apptResult = new Appointment();
+                apptResult.setAppointmentId(rs.getInt("appointmentId"));
+                apptResult.setTitle(rs.getString("title"));
+                apptResult.setDescription(rs.getString("description"));
+                apptResult.setLocation(rs.getString("location"));
+                apptResult.setContact(rs.getString("contact"));
+                apptResult.setUrl(rs.getString("url"));
+
+                // Convert time from UTC to local time zone
+                ZoneId zone = ZoneId.systemDefault();
+                LocalDateTime startTimeLocalZone = rs.getTimestamp("start").toLocalDateTime()
+                        .atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
+                LocalDateTime endTimeLocalZone = rs.getTimestamp("end").toLocalDateTime()
+                        .atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
+                apptResult.setStartDateTime(startTimeLocalZone);
+                apptResult.setEndDateTime(endTimeLocalZone);
+
+                // Get customer
+                CustomerAccess customerAccess = new CustomerAccess();
+                apptResult.setCustomer(customerAccess.getCustomer(rs.getInt("customerId")));
 
                 appointments.add(apptResult);
             }

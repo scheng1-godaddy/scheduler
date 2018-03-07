@@ -39,14 +39,13 @@ public class ReportsConsultantScheduleController extends AbstractReportControlle
     private TableColumn<Appointment, String> columnTitle;
 
     @FXML
-    protected TableView<Appointment> tableView;
+    private TableView<Appointment> tableView;
 
     @FXML
-    protected ComboBox<User> dropDown;
+    private ComboBox<User> dropDown;
 
     private User selectedUser;
 
-    private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
 
     /**
      * Initial items to run when the page screen first loads
