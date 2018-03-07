@@ -1,4 +1,6 @@
 package shawn_cheng.access;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import shawn_cheng.model.User;
 import java.sql.*;
 import shawn_cheng.MainApp;
@@ -11,13 +13,6 @@ public class UserAccess {
     public User login (String userName, String passWord) {
         String selectUserQuery = "SELECT * FROM user WHERE userName = ? AND password = ?";
         User fetchedUser = new User();
-        /*
-        String driver = "com.mysql.jdbc.Driver";
-        String db = "U047Jn";
-        String url = "jdbc:mysql://52.206.157.109/" + db;
-        String user = "U047Jn";
-        String pass = "53688170277";
-        */
         try {
             System.out.println("Preparing SQL Statement for login");
             PreparedStatement preparedStatement = conn.prepareStatement(selectUserQuery);
@@ -42,4 +37,27 @@ public class UserAccess {
         }
         return fetchedUser;
     }
+
+    public ObservableList<User> getAllUsers() {
+        ObservableList<User> usersList = FXCollections.observableArrayList();
+        String getCustomerQuery = "SELECT * FROM user WHERE active = 1";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(getCustomerQuery);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                User fetchedUser = new User();
+                fetchedUser.setUserName(rs.getString("userName"));
+                fetchedUser.setPassWord(rs.getString("password"));
+                fetchedUser.setUserID(rs.getInt("userId"));
+                fetchedUser.setActive(rs.getInt("active"));
+                usersList.add(fetchedUser);
+            }
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return usersList;
+    }
+
 }

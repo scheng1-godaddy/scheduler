@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import shawn_cheng.MainApp;
 import shawn_cheng.model.Appointment;
+import shawn_cheng.model.ReportTypeCount;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class AppointmentAccess {
 
     private Connection conn = MainApp.getDBConnection();
 
+    /*
     public ObservableList<Appointment> getAllAppointments() {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         String getAppointmentQuery = "SELECT * FROM appointment AS a JOIN customer AS c " +
@@ -21,7 +23,7 @@ public class AppointmentAccess {
                 "WHERE c.active = 1 " +
                 "ORDER BY a.start";
 
-        try{
+        try {
             PreparedStatement stmt = conn.prepareStatement(getAppointmentQuery);
             ResultSet rs = stmt.executeQuery();
 
@@ -49,12 +51,13 @@ public class AppointmentAccess {
 
                 appointments.add(appt);
             }
-        } catch(SQLException ex){
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
 
         return appointments;
     }
+    */
 
     public ObservableList<Appointment> getAppointmentsSubset(LocalDateTime startTime, LocalDateTime endTime) {
 
@@ -155,10 +158,10 @@ public class AppointmentAccess {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-            if(result.next()) {
+            if (result.next()) {
                 id = result.getInt(1);
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         System.out.println("Appointment ID is: " + (id + 1));
@@ -191,7 +194,7 @@ public class AppointmentAccess {
             stmt.setString(9, MainApp.userName);
             stmt.setInt(10, appointment.getAppointmentId());
             stmt.executeUpdate();
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
@@ -202,7 +205,7 @@ public class AppointmentAccess {
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, appointment.getAppointmentId());
             stmt.executeUpdate();
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
@@ -263,6 +266,89 @@ public class AppointmentAccess {
         } catch (SQLException e) {
 
             System.out.println(e.getMessage());
+        }
+
+        return appointments;
+    }
+
+    public ObservableList<ReportTypeCount> getAppointmentsSubsetGroupType(LocalDateTime startTime, LocalDateTime endTime) {
+
+        ObservableList<ReportTypeCount> resultList = FXCollections.observableArrayList();
+
+        String query = "SELECT count(description), description FROM appointment as a " +
+                "WHERE a.start >= ? AND a.end <= ? " +
+                "GROUP BY a.description " +
+                "ORDER BY a.description";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            // Need to convert times to UTC for the query (times in DB are in UTC).
+            ZoneId zone = ZoneId.systemDefault();
+            LocalDateTime startDatetimeParam = startTime.atZone(zone).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+            LocalDateTime endDatetimeParam = endTime.atZone(zone).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+            stmt.setTimestamp(1, Timestamp.valueOf(startDatetimeParam));
+            stmt.setTimestamp(2, Timestamp.valueOf(endDatetimeParam));
+            System.out.println("Executing the following query: " + stmt);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ReportTypeCount reportTypeCount = new ReportTypeCount();
+                reportTypeCount.setCount(rs.getInt("count(description)"));
+                reportTypeCount.setDescription(rs.getString("description"));
+                resultList.add(reportTypeCount);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        return resultList;
+    }
+
+    public ObservableList<Appointment> getAppointmentsSubsetByUser(LocalDateTime startTime, LocalDateTime endTime, String user) {
+
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+
+        String query = "SELECT * FROM appointment AS a JOIN customer AS c " +
+                "ON a.customerId = c.customerId " +
+                "WHERE a.start >= ? AND a.end <= ? AND a.createdBy = ? AND c.active = 1 " +
+                "ORDER BY a.start";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            // Need to convert times to UTC for the query (times in DB are in UTC).
+            ZoneId zone = ZoneId.systemDefault();
+            LocalDateTime startDatetimeParam = startTime.atZone(zone).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+            LocalDateTime endDatetimeParam = endTime.atZone(zone).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+            stmt.setTimestamp(1, Timestamp.valueOf(startDatetimeParam));
+            stmt.setTimestamp(2, Timestamp.valueOf(endDatetimeParam));
+            stmt.setString(3, user);
+            System.out.println("Executing the following query: " + stmt);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Appointment apptResult = new Appointment();
+                apptResult.setAppointmentId(rs.getInt("appointmentId"));
+                apptResult.setTitle(rs.getString("title"));
+                apptResult.setDescription(rs.getString("description"));
+                apptResult.setLocation(rs.getString("location"));
+                apptResult.setContact(rs.getString("contact"));
+                apptResult.setUrl(rs.getString("url"));
+
+                // Convert time from UTC to local time zone
+                LocalDateTime startTimeLocalZone = rs.getTimestamp("start").toLocalDateTime()
+                        .atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
+                LocalDateTime endTimeLocalZone = rs.getTimestamp("end").toLocalDateTime()
+                        .atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
+                apptResult.setStartDateTime(startTimeLocalZone);
+                apptResult.setEndDateTime(endTimeLocalZone);
+
+                // Get customer
+                CustomerAccess customer = new CustomerAccess();
+                apptResult.setCustomer(customer.getCustomer(rs.getInt("customerId")));
+
+                appointments.add(apptResult);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
 
         return appointments;

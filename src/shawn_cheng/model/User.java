@@ -86,4 +86,8 @@ public class User {
         }
     }
 
+    public String toString() {
+        return getUserName();
+    }
+
 }

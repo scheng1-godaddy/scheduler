@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1000.0" stylesheets="@schedulerCSS.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shawn_cheng.controller.ReportsHistoryCustomerController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1000.0" stylesheets="@schedulerCSS.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shawn_cheng.controller.ReportsConsultantScheduleController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#323232" height="90.0" layoutY="81.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
       <Label alignment="CENTER" layoutY="87.0" prefHeight="81.0" prefWidth="1000.0" text="Reports" textAlignment="CENTER" textFill="WHITE">
@@ -32,15 +32,15 @@
       </Text>
       <TableView fx:id="tableView" layoutX="274.0" layoutY="244.0" prefHeight="514.0" prefWidth="724.0">
         <columns>
-          <TableColumn fx:id="columnDate" prefWidth="128.0" text="Date" />
-          <TableColumn fx:id="columnTitle" prefWidth="319.0" text="Title" />
-            <TableColumn fx:id="columnType" prefWidth="153.0" text="Type" />
-            <TableColumn fx:id="columnConsultant" prefWidth="123.0" text="Consultant" />
+          <TableColumn fx:id="columnStartTime" prefWidth="128.0" text="Start" />
+            <TableColumn fx:id="columnEndTime" prefWidth="153.0" text="End" />
+            <TableColumn fx:id="columnCustomer" prefWidth="194.0" text="Customer" />
+          <TableColumn fx:id="columnTitle" prefWidth="248.0" text="Title" />
         </columns>
       </TableView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bcbcbc" height="42.0" layoutY="170.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d5dfe8" height="549.0" layoutY="212.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="273.0" />
-      <Text layoutX="2.0" layoutY="198.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointment History Per Customer" textAlignment="CENTER" wrappingWidth="999.9999974370003">
+      <Text layoutX="2.0" layoutY="198.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consultant Schedule" textAlignment="CENTER" wrappingWidth="999.9999974370003">
          <font>
             <Font size="18.0" />
          </font>
@@ -49,6 +49,6 @@
       <Button layoutY="253.0" mnemonicParsing="false" onAction="#HandlerConsultantSchedule" prefHeight="42.0" prefWidth="273.0" text="Consultant Schedule" />
       <Button layoutY="295.0" mnemonicParsing="false" onAction="#HandlerHistoryPerCustomer" prefHeight="42.0" prefWidth="273.0" text="Appointment History per Customer" />
       <Button layoutX="678.0" layoutY="214.0" mnemonicParsing="false" onAction="#HandlerRunReport" text="Run Report" />
-      <ComboBox fx:id="dropDown" layoutX="768.0" layoutY="214.0" prefHeight="27.0" prefWidth="227.0" promptText="Select Customer" />
+      <ComboBox fx:id="dropDown" layoutX="768.0" layoutY="214.0" prefHeight="27.0" prefWidth="227.0" promptText="Select Consultant" />
    </children>
 </AnchorPane>

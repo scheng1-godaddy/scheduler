@@ -132,4 +132,34 @@ public class ScreenDisplays {
             e.printStackTrace();
         }
     }
+
+    public static void displayReportConsultantScheduleScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("views/ReportsConsultantSchedule.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+            System.out.println("Displaying Reports: Consultant Schedule screen");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void displayReportHistoryPerCustomerScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("views/ReportsHistoryPerCustomer.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+            System.out.println("Displaying Reports: History Per Customer screen");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
