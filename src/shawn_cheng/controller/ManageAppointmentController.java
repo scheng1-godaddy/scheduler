@@ -11,9 +11,11 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.access.CustomerAccess;
+import shawn_cheng.access.ReminderAccess;
 import shawn_cheng.exceptions.InvalidInputException;
 import shawn_cheng.model.Appointment;
 import shawn_cheng.model.Customer;
+import shawn_cheng.model.Reminder;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -130,15 +132,24 @@ public class ManageAppointmentController extends AbstractMainController implemen
 
             // Create DB access object for appointment table
             AppointmentAccess appointmentAccess = new AppointmentAccess();
+            // Create DB access object for reminder table
+            ReminderAccess reminderAccess = new ReminderAccess();
 
             // If modifying an appointment, then update. If not, then add.
             if (modify) {
                 newAppt.setAppointmentId(selectedAppointment.getAppointmentId());
                 appointmentAccess.updateAppointment(newAppt);
+                // Build reminder object and update reminder table
+                Reminder reminder = new Reminder(newAppt);
+                reminderAccess.updateReminder(reminder);
             } else {
                 int apptId = appointmentAccess.addAppointment(newAppt);
                 newAppt.setAppointmentId(apptId);
+                // Build reminder object and insert into reminder table
+                Reminder reminder = new Reminder(newAppt);
+                reminderAccess.addReminder(reminder);
             }
+
 
 
             if (AbstractCalendarController.viewingWeeklyCalendar) {

@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
+import shawn_cheng.MainApp;
 import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.model.Appointment;
 

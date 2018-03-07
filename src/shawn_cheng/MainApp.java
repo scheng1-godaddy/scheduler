@@ -3,15 +3,20 @@ package shawn_cheng;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.layout.AnchorPane;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.stage.Stage;
+import shawn_cheng.access.ReminderAccess;
 import shawn_cheng.controller.*;
+import shawn_cheng.model.Reminder;
 
 /**
  * This is the main class for the inventory app. 
@@ -29,6 +34,7 @@ public class MainApp extends Application {
     public static ResourceBundle rb;
     public static Connection conn;
     public static String userName;
+    public static ReminderAccess reminderAccess;
     /**
      * Constructor
      */
@@ -82,14 +88,45 @@ public class MainApp extends Application {
         this.rb = ResourceBundle.getBundle("loginBundle", this.locale);
     }
 
+    public static void reminderCheck() {
+        System.out.println("Running reminder check");
+        if (userName == null){
+            return;
+        }
+        ObservableList<Reminder> reminderList = reminderAccess.getReminders(LocalDateTime.now(), LocalDateTime.now().plusMinutes(20), userName);
+        for (Reminder reminder : reminderList) {
+            System.out.println("Reminders retrieved are: " + reminder.getAppointment().getTitle());
+            Platform.runLater(() -> ScreenDisplays.displayReminder(reminder));
+        }
+    }
 
     /**
      * Main method, used to launch the application
      * @param args args
      */
     public static void main(String[] args) {
+
+
         dbConnection();
-        launch(args);
+        reminderAccess = new ReminderAccess();
+        ScheduledExecutorService reminderCheckService = null;
+
+        try {
+            System.out.println("Assign runnable remindersTask");
+            Runnable remindersTask = () -> reminderCheck();
+            System.out.println("Thread pool");
+            reminderCheckService = Executors.newScheduledThreadPool(2);
+            //reminderCheckService = Executors.newSingleThreadScheduledExecutor();
+            System.out.println("Delay");
+            reminderCheckService.scheduleWithFixedDelay(remindersTask, 0, 10, TimeUnit.SECONDS);
+            System.out.println("Launch");
+            launch(args);
+        } finally {
+            // Shutdown the task when application thread closes
+            if(reminderCheckService != null) {
+                reminderCheckService.shutdown();
+            }
+        }
 
     }
 }

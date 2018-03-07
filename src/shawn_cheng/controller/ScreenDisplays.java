@@ -5,10 +5,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import shawn_cheng.MainApp;
+import shawn_cheng.access.ReminderAccess;
+import shawn_cheng.model.Appointment;
+import shawn_cheng.model.Reminder;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class ScreenDisplays {
 
@@ -161,5 +167,22 @@ public class ScreenDisplays {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void displayReminder(Reminder reminder) {
+        Appointment appointment = reminder.getAppointment();
+        String apptTitle = appointment.getTitle();
+        LocalDateTime apptTime = appointment.getStartDateTime();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.NONE);
+        alert.setTitle("Appointment Reminder");
+        alert.setHeaderText("Appointment Reminder");
+        alert.setContentText("Appointment " + apptTitle + " is starting at  " + apptTime.toString());
+        alert.showAndWait()
+                .filter(response -> response == ButtonType.OK)
+                .ifPresent(response -> {
+                    MainApp.reminderAccess.removeReminder(reminder);
+                });
     }
 }
