@@ -44,29 +44,7 @@ public class AppointmentAccess {
             stmt.setTimestamp(2, Timestamp.valueOf(endDatetimeParam));
             stmt.setString(3, MainApp.userName);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Appointment apptResult = new Appointment();
-                apptResult.setAppointmentId(rs.getInt("appointmentId"));
-                apptResult.setTitle(rs.getString("title"));
-                apptResult.setDescription(rs.getString("description"));
-                apptResult.setLocation(rs.getString("location"));
-                apptResult.setContact(rs.getString("contact"));
-                apptResult.setUrl(rs.getString("url"));
-
-                // Convert time from UTC to local time zone
-                LocalDateTime startTimeLocalZone = rs.getTimestamp("start").toLocalDateTime()
-                        .atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
-                LocalDateTime endTimeLocalZone = rs.getTimestamp("end").toLocalDateTime()
-                        .atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
-                apptResult.setStartDateTime(startTimeLocalZone);
-                apptResult.setEndDateTime(endTimeLocalZone);
-
-                // Get customer
-                CustomerAccess customer = new CustomerAccess();
-                apptResult.setCustomer(customer.getCustomer(rs.getInt("customerId")));
-
-                appointments.add(apptResult);
-            }
+            appointments = createAppointmentList(appointments, zone, rs);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -78,7 +56,7 @@ public class AppointmentAccess {
      * @param appointment
      * @return
      */
-    public int addAppointment(Appointment appointment) {
+    public int addAppointment(Appointment appointment) throws SQLException{
         System.out.println("Add appointment called in AppointmentAccess");
         // Get appointment ID
         int apptID = getNewId();
@@ -120,22 +98,18 @@ public class AppointmentAccess {
         return apptID;
     }
 
-    public int getNewId() {
+    /**
+     * Get new ID
+     * @return
+     */
+    public int getNewId() throws SQLException{
         int id = 0;
         String query = "SELECT MAX(appointmentId) FROM appointment";
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet result = stmt.executeQuery(query);
-
-            if (result.next()) {
-                id = result.getInt(1);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        System.out.println("Appointment ID is: " + (id + 1));
+        id = ShareAccess.getId(id, query, conn.createStatement());
         return id + 1;
     }
+
+
 
     public void updateAppointment(Appointment appointment) {
         String query = "UPDATE appointment " +
@@ -293,33 +267,38 @@ public class AppointmentAccess {
             stmt.setString(3, user);
             System.out.println("Executing the following query: " + stmt);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Appointment apptResult = new Appointment();
-                apptResult.setAppointmentId(rs.getInt("appointmentId"));
-                apptResult.setTitle(rs.getString("title"));
-                apptResult.setDescription(rs.getString("description"));
-                apptResult.setLocation(rs.getString("location"));
-                apptResult.setContact(rs.getString("contact"));
-                apptResult.setUrl(rs.getString("url"));
-
-                // Convert time from UTC to local time zone
-                LocalDateTime startTimeLocalZone = rs.getTimestamp("start").toLocalDateTime()
-                        .atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
-                LocalDateTime endTimeLocalZone = rs.getTimestamp("end").toLocalDateTime()
-                        .atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
-                apptResult.setStartDateTime(startTimeLocalZone);
-                apptResult.setEndDateTime(endTimeLocalZone);
-
-                // Get customer
-                CustomerAccess customer = new CustomerAccess();
-                apptResult.setCustomer(customer.getCustomer(rs.getInt("customerId")));
-
-                appointments.add(apptResult);
-            }
+            appointments = createAppointmentList(appointments, zone, rs);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
 
+        return appointments;
+    }
+
+    ObservableList<Appointment> createAppointmentList(ObservableList<Appointment> appointments, ZoneId zone, ResultSet rs) throws SQLException {
+        while (rs.next()) {
+            Appointment apptResult = new Appointment();
+            apptResult.setAppointmentId(rs.getInt("appointmentId"));
+            apptResult.setTitle(rs.getString("title"));
+            apptResult.setDescription(rs.getString("description"));
+            apptResult.setLocation(rs.getString("location"));
+            apptResult.setContact(rs.getString("contact"));
+            apptResult.setUrl(rs.getString("url"));
+
+            // Convert time from UTC to local time zone
+            LocalDateTime startTimeLocalZone = rs.getTimestamp("start").toLocalDateTime()
+                    .atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
+            LocalDateTime endTimeLocalZone = rs.getTimestamp("end").toLocalDateTime()
+                    .atZone(ZoneOffset.UTC).withZoneSameInstant(zone).toLocalDateTime();
+            apptResult.setStartDateTime(startTimeLocalZone);
+            apptResult.setEndDateTime(endTimeLocalZone);
+
+            // Get customer
+            CustomerAccess customer = new CustomerAccess();
+            apptResult.setCustomer(customer.getCustomer(rs.getInt("customerId")));
+
+            appointments.add(apptResult);
+        }
         return appointments;
     }
 }

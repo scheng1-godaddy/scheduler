@@ -1,17 +1,22 @@
 package shawn_cheng.access;
 
 import shawn_cheng.model.City;
-
 import java.sql.*;
-
 import shawn_cheng.MainApp;
-import shawn_cheng.model.Country;
 
-
+/**
+ * Access object for city information
+ */
 public class CityAccess {
 
-    Connection conn = MainApp.conn;
+    // Get database connection
+    Connection conn = MainApp.getDBConnection();
 
+    /**
+     * Get city
+     * @param cityId
+     * @return
+     */
     public City getCity(int cityId) {
         String query = "SELECT * FROM city WHERE cityId = ?";
         City city = new City();
@@ -20,11 +25,9 @@ public class CityAccess {
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, cityId);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()){
                 city.setCity(rs.getString("city"));
                 city.setCityID(rs.getInt("cityId"));
-
                 CountryAccess country = new CountryAccess();
                 city.setCountry(country.getCountry(rs.getInt("countryId")));
             } else {
@@ -36,8 +39,13 @@ public class CityAccess {
         return city;
     }
 
-    public int addCity(City city) {
-        System.out.println("addCity in CityAccess called");
+    /**
+     * Add city to city table
+     * @param city
+     * @return city ID
+     * @throws SQLException
+     */
+    public int addCity(City city) throws SQLException {
         String query = "INSERT INTO city " +
                 "(cityId, city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
                 "VALUES (?, ?, ?, NOW(), ?, NOW(), ?)";
@@ -49,7 +57,6 @@ public class CityAccess {
             stmt.setInt(3, city.getCountry().getCountryID());
             stmt.setString(4, MainApp.userName);
             stmt.setString(5, MainApp.userName);
-            System.out.println("Executing the following SQL query " + stmt);
             stmt.executeUpdate();
         } catch(SQLException ex) {
             System.out.println(ex.getMessage());
@@ -57,6 +64,11 @@ public class CityAccess {
         return cityID;
     }
 
+    /**
+     * Update city table
+     * @param city
+     * @param newCityName
+     */
     public void updateCity(City city, String newCityName) {
         System.out.println("updateCountry in CountryAccess called");
         String query = "UPDATE city SET city=?, lastUpdate=NOW(), lastUpdateBy=? WHERE cityId = ?";
@@ -72,20 +84,15 @@ public class CityAccess {
         }
     }
 
-    public int getNewId() {
+    /**
+     * Get new ID
+     * @return
+     * @throws SQLException
+     */
+    public int getNewId() throws SQLException{
         int id = 0;
         String query = "SELECT MAX(cityId) FROM city";
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet result = stmt.executeQuery(query);
-
-            if(result.next()) {
-                id = result.getInt(1);
-            }
-        } catch(SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        System.out.println("City ID is: " + (id + 1));
+        id = ShareAccess.getId(id, query, conn.createStatement());
         return id + 1;
     }
 }

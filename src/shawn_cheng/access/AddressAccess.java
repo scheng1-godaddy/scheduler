@@ -51,7 +51,7 @@ public class AddressAccess {
      * @param address
      * @return
      */
-    public int addAddress(Address address) {
+    public int addAddress(Address address) throws SQLException {
         String query = "INSERT INTO address " +
                 "(addressId, address, address2, cityId, postalCode, phone, " +
                 "createDate, createdBy, lastUpdate, lastUpdateBy) " +
@@ -104,19 +104,10 @@ public class AddressAccess {
      * Gets new ID
      * @return
      */
-    public int getNewId() {
+    public int getNewId() throws SQLException {
         int id = 0;
         String query = "SELECT MAX(addressId) FROM address";
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet result = stmt.executeQuery(query);
-
-            if(result.next()) {
-                id = result.getInt(1);
-            }
-        } catch(SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        id = ShareAccess.getId(id, query, conn.createStatement());
         return id + 1;
     }
 }

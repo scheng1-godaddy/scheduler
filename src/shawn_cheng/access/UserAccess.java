@@ -5,11 +5,20 @@ import shawn_cheng.model.User;
 import java.sql.*;
 import shawn_cheng.MainApp;
 
+/**
+ * User Access Object
+ */
 public class UserAccess {
 
+    // Get database connection
     Connection conn = MainApp.getDBConnection();
-    { System.out.println("Connection is " + conn); }
 
+    /**
+     * Verify login information
+     * @param userName
+     * @param passWord
+     * @return
+     */
     public User login (String userName, String passWord) {
         String selectUserQuery = "SELECT * FROM user WHERE userName = ? AND password = ?";
         User fetchedUser = new User();
@@ -38,13 +47,16 @@ public class UserAccess {
         return fetchedUser;
     }
 
+    /**
+     * Gets all users
+     * @return
+     */
     public ObservableList<User> getAllUsers() {
         ObservableList<User> usersList = FXCollections.observableArrayList();
         String getCustomerQuery = "SELECT * FROM user WHERE active = 1";
         try {
             PreparedStatement stmt = conn.prepareStatement(getCustomerQuery);
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
                 User fetchedUser = new User();
                 fetchedUser.setUserName(rs.getString("userName"));
@@ -56,7 +68,6 @@ public class UserAccess {
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }
-
         return usersList;
     }
 
