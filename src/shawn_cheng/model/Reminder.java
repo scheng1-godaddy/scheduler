@@ -16,7 +16,6 @@ public class Reminder {
      */
     public Reminder(Appointment appointment) {
         this.appointment = appointment;
-        //this.reminderDateTime = appointment.getStartDateTime().minusMinutes(15);
         this.reminderDateTime = appointment.getStartDateTime();
     }
 

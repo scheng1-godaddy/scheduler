@@ -212,50 +212,15 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
     }
 
     private void populateTimeLabels() {
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
         LocalTime calTimes = LocalTime.of(9, 0);
         for (int rowIndex = 0; rowIndex <= 15; rowIndex++) {
             Label timeLabel = new Label();
-            timeLabel.setText(calTimes.toString());
+            timeLabel.setText(calTimes.format(timeFormat));
             calendarGrid.add(timeLabel, 0, rowIndex);
             GridPane.setHalignment(timeLabel, HPos.CENTER);
             calTimes = calTimes.plusMinutes(30);
         }
-    }
-
-    /**
-     * This method generates the BorderPane node that contains both the day of month label
-     * and the ListView that houses the appointment information.
-     * @param currentDate
-     * @return dailyBorderPane
-     */
-    public BorderPane getDailyPane (LocalDate currentDate) {
-        // Make the Border Pane that will contain the day of month and appointment info
-        BorderPane dailyBorderPane = new BorderPane();
-
-        // Make the label for day of month
-        Label dayOfMonthLabel = new Label();
-        dayOfMonthLabel.setText(Integer.toString(currentDate.getDayOfMonth()));
-
-        // Get appointment information.
-        ObservableList<Appointment> dailyAppointments = this.calendarAppointments.stream()
-                .filter(e -> e.getStartDateTime().toLocalDate().equals(currentDate))
-                .collect(Collectors.toCollection(FXCollections::observableArrayList));
-
-        // Create list view from daily appointments.
-        ListView<Appointment> dailyApptListView = new ListView<>(dailyAppointments);
-
-        // Add listener to detect when user selects appointment in the list view
-        dailyApptListView.getSelectionModel().selectedItemProperty()
-                .addListener((obs, oldVal, newVal) -> selectedAppointment = newVal);
-
-        // Attach day of month to the daily border pane
-        dailyBorderPane.setTop(dayOfMonthLabel);
-        BorderPane.setAlignment(dayOfMonthLabel, Pos.TOP_RIGHT);
-
-        // Attach appointment information to the border pane
-        dailyBorderPane.setCenter(dailyApptListView);
-
-        return dailyBorderPane;
     }
 
 }

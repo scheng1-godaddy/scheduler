@@ -5,10 +5,19 @@ import java.sql.*;
 import shawn_cheng.MainApp;
 import shawn_cheng.model.*;
 
+/**
+ * Access object for address information
+ */
 public class AddressAccess {
 
-    Connection conn = MainApp.conn;
+    // Get database connection
+    Connection conn = MainApp.getDBConnection();
 
+    /**
+     * Get address
+     * @param addressId
+     * @return address
+     */
     public Address getAddress(int addressId) {
         String query = "SELECT * FROM address WHERE addressId = ?";
         Address address = new Address();
@@ -37,8 +46,12 @@ public class AddressAccess {
         return address;
     }
 
+    /**
+     * Add address
+     * @param address
+     * @return
+     */
     public int addAddress(Address address) {
-        System.out.println("addAddress in AddressAccess called");
         String query = "INSERT INTO address " +
                 "(addressId, address, address2, cityId, postalCode, phone, " +
                 "createDate, createdBy, lastUpdate, lastUpdateBy) " +
@@ -54,7 +67,6 @@ public class AddressAccess {
             stmt.setString(6, address.getPhone());
             stmt.setString(7, MainApp.userName);
             stmt.setString(8, MainApp.userName);
-            System.out.println("Executing the following SQL query " + stmt);
             stmt.executeUpdate();
         } catch(SQLException ex) {
             System.out.println(ex.getMessage());
@@ -62,9 +74,16 @@ public class AddressAccess {
         return addressID;
     }
 
+    /**
+     * Updates address information
+     * @param address
+     * @param newAddress1
+     * @param newAddress2
+     * @param postalCode
+     * @param phoneNumber
+     */
     public void updateAddress(Address address, String newAddress1, String newAddress2,
                               String postalCode, String phoneNumber) {
-        System.out.println("updateAddress in AddressAccess called");
         String query = "UPDATE address SET address=?, address2=?, postalCode=?, phone=?, " +
                 "lastUpdate=NOW(), lastUpdateBy=? WHERE addressId = ?";
         try {
@@ -75,13 +94,16 @@ public class AddressAccess {
             stmt.setString(4, phoneNumber);
             stmt.setString(5, MainApp.userName);
             stmt.setInt(6, address.getAddressID());
-            System.out.println("Executing the following SQL " + stmt);
             stmt.executeUpdate();
         } catch(SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
+    /**
+     * Gets new ID
+     * @return
+     */
     public int getNewId() {
         int id = 0;
         String query = "SELECT MAX(addressId) FROM address";
@@ -95,7 +117,6 @@ public class AddressAccess {
         } catch(SQLException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("City ID is: " + (id + 1));
         return id + 1;
     }
 }

@@ -109,11 +109,38 @@ public class ReminderAccess {
 
             stmt.setTimestamp(1, Timestamp.valueOf(reminderDate));
             stmt.setInt(2, reminder.getReminderId());
+
+            System.out.println("Executing the following SQL: " + stmt);
+
             stmt.executeUpdate();
         } catch(SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
+
+    /**
+     * Get reminder ID based on appointment ID
+     * @param apptId
+     */
+    public int getExistingReminderId(int apptId) {
+        String query = "SELECT reminderId FROM reminder WHERE appointmentId = ?";
+        int fetchedApptId = 0;
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, apptId);
+
+            System.out.println("Executing the following SQL: " + stmt);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                fetchedApptId = rs.getInt("reminderId");
+            }
+        } catch(SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return fetchedApptId;
+    }
+
 
     public ObservableList<Reminder> getReminders(LocalDateTime startTime, LocalDateTime endTime, String userName) {
         ObservableList<Reminder> reminders = FXCollections.observableArrayList();

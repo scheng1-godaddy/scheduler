@@ -152,6 +152,11 @@ public class Appointment {
             errorMsg += "Appointment end time must be later then the start time\n";
         }
 
+        // Check if during business hours. I have to assume that business hours is based on the users local time zone (since the user is an employee!)
+        if (selectedStartTime.isBefore(LocalTime.MIDNIGHT.plusHours(9)) || selectedEndTime.isAfter(LocalTime.MIDNIGHT.plusHours(17))) {
+            errorMsg += "Appointment must be during business hours\n";
+        }
+
         // Check for overlapping appointments
         AppointmentAccess appointmentAccess = new AppointmentAccess();
         ObservableList<Appointment> appointments = appointmentAccess.getAppointmentOverlaps(selectedStartDateTime, selectedEndDateTime);

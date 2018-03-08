@@ -9,7 +9,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -88,40 +87,51 @@ public class MainApp extends Application {
         this.rb = ResourceBundle.getBundle("loginBundle", this.locale);
     }
 
-    public static void reminderCheck() {
-        System.out.println("Running reminder check");
-        if (userName == null){
-            return;
-        }
-        ObservableList<Reminder> reminderList = reminderAccess.getReminders(LocalDateTime.now(), LocalDateTime.now().plusMinutes(20), userName);
-        for (Reminder reminder : reminderList) {
-            System.out.println("Reminders retrieved are: " + reminder.getAppointment().getTitle());
-            Platform.runLater(() -> ScreenDisplays.displayReminder(reminder));
-        }
-    }
-
     /**
      * Main method, used to launch the application
      * @param args args
      */
     public static void main(String[] args) {
-
-
+        // Get DB Connection
         dbConnection();
+
+        // Create reminder table access object
         reminderAccess = new ReminderAccess();
+
+        // Create reference to executor service
         ScheduledExecutorService reminderCheckService = null;
 
+        // Need to run reminder in this try block because the finally block will stop the thread after Application object ends
         try {
-            System.out.println("Assign runnable remindersTask");
-            Runnable remindersTask = () -> reminderCheck();
-            System.out.println("Thread pool");
-            reminderCheckService = Executors.newScheduledThreadPool(2);
-            //reminderCheckService = Executors.newSingleThreadScheduledExecutor();
-            System.out.println("Delay");
-            reminderCheckService.scheduleWithFixedDelay(remindersTask, 0, 10, TimeUnit.SECONDS);
-            System.out.println("Launch");
+
+            // Run factory to create single thread executor
+            reminderCheckService = Executors.newSingleThreadScheduledExecutor();
+
+            // Lambda instead of anonymous class for the runnable
+            reminderCheckService.scheduleWithFixedDelay(() -> {
+                    System.out.println("Running reminder check");
+
+                    // If user isn't logged in, get out.
+                    if (userName == null){
+                        return;
+                    }
+
+                    // Note that the end time is 15 minutes out.
+                    ObservableList<Reminder> reminderList = reminderAccess.getReminders(LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), userName);
+
+                    // Everything retrieved should be within 15 minutes, so show display prompts for each
+                    for (Reminder reminder : reminderList) {
+                        System.out.println("Reminders retrieved are: " + reminder.getAppointment().getTitle());
+                        // We need to use runLater because we want this to run on the JavaFX Application thread
+                        Platform.runLater(() -> ScreenDisplays.displayReminder(reminder));
+                    }
+            }, 0, 15, TimeUnit.SECONDS);
+
+            // Now we call the Application launch method
             launch(args);
+
         } finally {
+
             // Shutdown the task when application thread closes
             if(reminderCheckService != null) {
                 reminderCheckService.shutdown();

@@ -54,7 +54,9 @@ public class ManageAppointmentController extends AbstractMainController implemen
     @FXML
     public DatePicker dateField;
 
-    private ObservableList<String> appointmentTimes;
+    private ObservableList<String> appointmentStartTimes;
+
+    private ObservableList<String> appointmentEndTimes;
 
     private ObservableList<String> appointmentTypes;
 
@@ -76,8 +78,8 @@ public class ManageAppointmentController extends AbstractMainController implemen
         createDropDownList();
 
         // Populate the drop down menus
-        this.startTimeField.setItems(this.appointmentTimes);
-        this.endTimeField.setItems(this.appointmentTimes);
+        this.startTimeField.setItems(this.appointmentStartTimes);
+        this.endTimeField.setItems(this.appointmentEndTimes);
         this.descriptionField.setItems(this.appointmentTypes);
         this.customerField.setItems(this.customerList);
 
@@ -117,6 +119,7 @@ public class ManageAppointmentController extends AbstractMainController implemen
 
             // Create the proper time datetime objects from String values
             LocalDateTime startDateTime = LocalDateTime.of(this.dateField.getValue(), LocalTime.parse(this.startTimeField.getValue(), apptTimeFormat));
+            System.out.println("The startdatetime is: " + startDateTime.toString());
             LocalDateTime endDateTime = LocalDateTime.of(this.dateField.getValue(), LocalTime.parse(this.endTimeField.getValue(), apptTimeFormat));
 
             // Building appointment object now
@@ -141,7 +144,17 @@ public class ManageAppointmentController extends AbstractMainController implemen
                 appointmentAccess.updateAppointment(newAppt);
                 // Build reminder object and update reminder table
                 Reminder reminder = new Reminder(newAppt);
-                reminderAccess.updateReminder(reminder);
+                // We need to find out what the existing reminder ID is
+                int reminderId = reminderAccess.getExistingReminderId(selectedAppointment.getAppointmentId());
+                if (reminderId > 0) {
+                    // Only update if we actually found an ID
+                    reminder.setReminderId(reminderId);
+                    reminderAccess.updateReminder(reminder);
+                } else {
+                    // Couldn't find an ID
+                    System.out.println("Could not find existing reminder ID");
+                }
+
             } else {
                 int apptId = appointmentAccess.addAppointment(newAppt);
                 newAppt.setAppointmentId(apptId);
@@ -149,9 +162,6 @@ public class ManageAppointmentController extends AbstractMainController implemen
                 Reminder reminder = new Reminder(newAppt);
                 reminderAccess.addReminder(reminder);
             }
-
-
-
             if (AbstractCalendarController.viewingWeeklyCalendar) {
                 ScreenDisplays.displayWeeklyCalendarScreen();
             } else {
@@ -181,12 +191,13 @@ public class ManageAppointmentController extends AbstractMainController implemen
     private void createDropDownList(){
 
         // Create the appointment times
-        this.appointmentTimes = FXCollections.observableArrayList();
+        this.appointmentStartTimes = FXCollections.observableArrayList();
         LocalTime apptHours = LocalTime.MIDNIGHT.plusHours(9);
         for (int x = 0; x < 16; x++) {
-            appointmentTimes.add(apptHours.format(apptTimeFormat));
+            appointmentStartTimes.add(apptHours.format(apptTimeFormat));
             apptHours = apptHours.plusMinutes(30);
         }
+        this.appointmentEndTimes.add(apptHours.plusMinutes(30).format(apptTimeFormat));
 
         // Create the appointment types/descriptions
         // Since we need to run a report for the different types I'm hardcoding to a specific list

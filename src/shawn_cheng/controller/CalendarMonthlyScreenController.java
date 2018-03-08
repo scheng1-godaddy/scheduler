@@ -150,9 +150,6 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
      * @param currentDate
      * @return dailyBorderPane
      */
-
-
-    @Override
     public BorderPane getDailyPane (LocalDate currentDate) {
         // Make the Border Pane that will contain the day of month and appointment info
         BorderPane dailyBorderPane = new BorderPane();
