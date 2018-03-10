@@ -3,14 +3,19 @@ package shawn_cheng.model;
 import javafx.collections.ObservableList;
 import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.controller.ManageAppointmentController;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+/**
+ * Object to house appointment information
+ *
+ * @author Shawn Cheng
+ */
 public class Appointment {
+    // Variables for appointment information
     private int appointmentId;
     private Customer customer;
     public String title;
@@ -20,92 +25,168 @@ public class Appointment {
     private String url;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    private final LocalDateTime endOfDayLocalDateTime;
+
+    // Time Format
     private static final DateTimeFormatter timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
 
-    public Appointment () {
-        LocalTime midnight = LocalTime.MIDNIGHT;
-        LocalDate today = LocalDate.now();
-        endOfDayLocalDateTime = LocalDateTime.of(today, midnight);
-    }
-
+    /**
+     * Sets appointment ID
+     * @param appointmentId
+     */
     public void setAppointmentId(int appointmentId) {
         this.appointmentId = appointmentId;
     }
 
+    /**
+     * Gets the appointment ID
+     * @return
+     */
     public int getAppointmentId() {
         return appointmentId;
     }
 
+    /**
+     * Sets the customer object
+     * @param customer
+     */
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
+    /**
+     * Gets the customer object
+     * @return
+     */
     public Customer getCustomer() {
         return customer;
     }
 
+    /**
+     * Sets the title of the appointment
+     * @param title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Gets the title of the appointment
+     * @return
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Sets the appointment description
+     * @param description
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Gets the appointment description
+     * @return
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Sets the location of the appointment
+     * @param location
+     */
     public void setLocation(String location) {
         this.location = location;
     }
 
+    /**
+     * Gets the location of the appointment
+     * @return
+     */
     public String getLocation() {
         return location;
     }
 
+    /**
+     * Sets the contact information
+     * @param contact
+     */
     public void setContact(String contact) {
         this.contact = contact;
     }
 
+    /**
+     * Gets the contact information
+     * @return
+     */
     public String getContact() {
         return contact;
     }
 
+    /**
+     * Sets the URL
+     * @param url
+     */
     public void setUrl(String url) {
         this.url = url;
     }
 
+    /**
+     * Gets the URL
+     * @return
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Sets the start time of appointment
+     * @param startDateTime
+     */
     public void setStartDateTime(LocalDateTime startDateTime) {
         this.startDateTime = startDateTime;
     }
 
+    /**
+     * Gets the start time of the appointment
+     * @return
+     */
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
 
+    /**
+     * Sets the end time of the appointment
+     * @param endDateTime
+     */
     public void setEndDateTime(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;
     }
 
+    /**
+     * Gets the end time of the appointment
+     * @return
+     */
     public LocalDateTime getEndDateTime() {
         return endDateTime;
     }
 
+    /**
+     * Return the title of the appointment
+     * @return
+     */
     @Override
     public String toString() {
         return this.title;
     }
 
+    /**
+     * Validates the input for appointment information
+     * @param controller
+     * @return
+     */
     public static String validateInput(ManageAppointmentController controller) {
         System.out.println("Checking appointment input");
         String errorMessage = "";
@@ -131,6 +212,12 @@ public class Appointment {
         return errorMessage;
     }
 
+    /**
+     * Validates the time of the appointment. Must be within business hours. End time cannot be earlier or equal the
+     * start time. Appointment times cannot overlap with existing appointments for the same user/consultant. 
+     * @param controller
+     * @return
+     */
     public static String validateTimes(ManageAppointmentController controller) {
         System.out.println("Validating appointment times");
         String errorMsg = "";

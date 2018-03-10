@@ -11,7 +11,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.model.ReportTypeCount;
-
 import java.net.URL;
 import java.time.*;
 import java.time.format.DateTimeFormatter;

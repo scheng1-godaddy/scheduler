@@ -9,10 +9,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
-import shawn_cheng.MainApp;
 import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.model.Appointment;
-
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,14 +20,22 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class CalendarMonthlyScreenController extends AbstractCalendarController implements Initializable {
+    // Label for month displayed
+    @FXML private Label monthLabel;
+    // Keep track of the current selected month
+    private YearMonth selectedMonth;
 
-    @FXML
-    private Label monthLabel;
-
+    /**
+     * Override of initialize
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         // Get current month
         this.selectedMonth = YearMonth.now();
+
         // Display the calendar
         displayCalendar();
     }
@@ -78,11 +84,8 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
      */
     @Override
     public void displayCalendar() {
-
         displayMonthLabel();
-
         viewingWeeklyCalendar = false;
-
         selectedAppointment = null;
 
         // Clear what's currently on the grid
@@ -99,15 +102,11 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
         int lengthOfMonth = selectedMonth.lengthOfMonth();
         int dayOfWeek = firstDayofMonth.getDayOfWeek().getValue();
 
-        System.out.println("Length of current month is: " + lengthOfMonth);
-        System.out.println("Day of week for first day is: " + dayOfWeek);
-
         // Start with the first day of the month
         LocalDate currDate = firstDayofMonth;
 
         // Find the last day of the month
         LocalDate lastDayOfMonth = firstDayofMonth.plusDays(lengthOfMonth-1);
-        System.out.println("Last day of the month is: " + lastDayOfMonth.toString());
 
         // Nested loops to populate the grid/calendar
         OUTER: for (int rowIndex = 0; rowIndex <= 4; rowIndex++) {
@@ -121,7 +120,6 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
                     if (dayOfWeek == 7) {
                         colIndex = 0;
                     }
-
                 }
 
                 //Get daily BorderPane, which contains the appointments and the date label.
@@ -132,7 +130,6 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
 
                 // If last day, break out of the loop
                 if (currDate.equals(lastDayOfMonth)) {
-                    System.out.println("Current date is equal to the last date of the month, breaking loop");
                     break OUTER;
                 }
 
@@ -141,8 +138,6 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
             }
         }
     }
-
-
 
     /**
      * This method generates the BorderPane node that contains both the day of month label

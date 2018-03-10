@@ -13,60 +13,46 @@ import shawn_cheng.exceptions.InvalidInputException;
 import shawn_cheng.exceptions.InvalidSelectionException;
 import shawn_cheng.model.*;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the Customer management screen
+ * @author Shawn Cheng
+ */
 public class ManageCustomerScreenController extends AbstractMainController implements Initializable {
 
-    @FXML
-    private TableView<Customer> customerTableView;
+    // TableView and Table Columns
+    @FXML private TableView<Customer> customerTableView;
+    @FXML private TableColumn<Customer, String> nameColumn;
+    @FXML private TableColumn<Customer, String> address1Column;
+    @FXML private TableColumn<Customer, String> address2Column;
+    @FXML private TableColumn<Customer, String> cityColumn;
+    @FXML private TableColumn<Customer, String> zipColumn;
+    @FXML private TableColumn<Customer, String> countryColumn;
+    @FXML private TableColumn<Customer, String> phoneColumn;
 
-    @FXML
-    private TableColumn<Customer, String> nameColumn;
+    // Text input fields
+    @FXML public TextField nameField;
+    @FXML public TextField address1Field;
+    @FXML public  TextField address2Field;
+    @FXML public  TextField cityField;
+    @FXML public  TextField countryField;
+    @FXML public  TextField postalField;
+    @FXML public  TextField phoneField;
 
-    @FXML
-    private TableColumn<Customer, String> address1Column;
-
-    @FXML
-    private TableColumn<Customer, String> address2Column;
-
-    @FXML
-    private TableColumn<Customer, String> cityColumn;
-
-    @FXML
-    private TableColumn<Customer, String> zipColumn;
-
-    @FXML
-    private TableColumn<Customer, String> countryColumn;
-
-    @FXML
-    private TableColumn<Customer, String> phoneColumn;
-
+    // Keep track of selected customer
     private Customer selectedCustomer;
 
-    @FXML
-    public TextField nameField;
-
-    @FXML
-    public TextField address1Field;
-
-    @FXML
-    public  TextField address2Field;
-
-    @FXML
-    public  TextField cityField;
-
-    @FXML
-    public  TextField countryField;
-
-    @FXML
-    public  TextField postalField;
-
-    @FXML
-    public  TextField phoneField;
-
+    /**
+     * Override of initialize
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("Initializing Customer Table");
+
+        // Set cell value factory for columns
         nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomerName()));
         address1Column.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getAddress()));
         address2Column.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getAddress2()));
@@ -74,23 +60,41 @@ public class ManageCustomerScreenController extends AbstractMainController imple
         phoneColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getPhone()));
         cityColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCity().getCity()));
         countryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getCity().getCountry().getCountry()));
+
+        // Load the table with customer data
         loadCustomerTable();
+
+        // Keep track of customer that user selects
         customerTableView.setOnMouseClicked(event -> {
             selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
-            System.out.println("Customer clicked on was: " + selectedCustomer.getCustomerName());
         });
+
     }
 
+    /**
+     * Handler for the save button
+     * @param event
+     * @throws InvalidInputException
+     * @throws SQLException
+     */
     @FXML
-    void saveButtonHandler(ActionEvent event) throws InvalidInputException {
-        String errorMsg = Customer.validateInput(this);
-        System.out.println("ErrorMessage is: " + errorMsg);
+    void saveButtonHandler(ActionEvent event) throws InvalidInputException, SQLException {
 
+        // Validate the input
+        String errorMsg = Customer.validateInput(this);
+
+        // If errorMsg string has content, then there was issue with input
         if (errorMsg.length() > 0) {
+
+            // Throw exception because of invalid input
             throw new InvalidInputException(errorMsg);
+
         } else {
+
+            // Input is valid, check if we're adding or modifying
             if (this.selectedCustomer == null) {
-                System.out.println("Adding Customer");
+
+                // Its an add, send data to add functions
                 Country country = addCountry(this.countryField.getText());
                 City city = addCity(this.cityField.getText(), country);
                 Address address = addAddress(this.address1Field.getText(),
@@ -98,25 +102,36 @@ public class ManageCustomerScreenController extends AbstractMainController imple
                         this.postalField.getText(),
                         this.phoneField.getText(),
                         city);
-                Customer customer = addCustomer(this.nameField.getText(), address);
-                System.out.println("Customer Added: " + customer);
+                addCustomer(this.nameField.getText(), address);
+
+                // Go back to the customer display screen
                 ScreenDisplays.displayCustomerScreen();
+
             } else {
-                // Logic for modifying customer
-                System.out.println("Modifying customer information");
+
+                // Modifying customer, send data to the modify cuntions
                 modifyCountry(selectedCustomer.getAddress().getCity().getCountry());
                 modifyCity(selectedCustomer.getAddress().getCity());
                 modifyAddress(selectedCustomer.getAddress());
                 modifyCustomer(selectedCustomer);
+
+                // Display customer screen
                 ScreenDisplays.displayCustomerScreen();
             }
         }
     }
 
-
+    /**
+     * Handler for clear button
+     * @param event
+     */
     @FXML
     void clearButtonHandler(ActionEvent event) {
+
+        // Clears currently selected customer
         selectedCustomer = null;
+
+        // Clears input fields
         this.nameField.clear();
         this.address1Field.clear();
         this.address2Field.clear();
@@ -126,12 +141,26 @@ public class ManageCustomerScreenController extends AbstractMainController imple
         this.countryField.clear();
     }
 
+    /**
+     * Handler for the delete button
+     * @param event
+     * @throws InvalidSelectionException
+     */
     @FXML
     void deleteButtonHandler(ActionEvent event) throws InvalidSelectionException {
+
+        // Get the currently selected customer
         Customer selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
+
+        // Check if selected customer was null
         if (selectedCustomer == null) {
+
+            // Throw exception if no selected customer
             throw new InvalidSelectionException("Need a valid selection to delete");
+
         } else {
+
+            // Send alert to confirm deletion
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Confirmation");
             alert.setHeaderText("Delete Confirmation");
@@ -146,25 +175,49 @@ public class ManageCustomerScreenController extends AbstractMainController imple
         }
     }
 
+    /**
+     * Handler for the modify button
+     * @param event
+     * @throws InvalidSelectionException
+     */
     @FXML
     void modifyButtonHandler(ActionEvent event) throws InvalidSelectionException {
+
+        // Find currently selected customer
         Customer selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
+
+        // Check if selected customer was null
         if (selectedCustomer == null) {
+
+            // Throw exception if no customer selected
             throw new InvalidSelectionException("Need a valid selection to modify");
+
         } else {
+
+            // Load selected customer into input fields
             loadSelectedCustomer(selectedCustomer);
         }
     }
 
-
+    /**
+     * Load the customer table
+     */
     public void loadCustomerTable() {
-        System.out.println("Starting load customer data into tableview");
+
+        // Create the db access object
         CustomerAccess customerAccess = new CustomerAccess();
+
+        // Populate table with customer data
         customerTableView.setItems(customerAccess.getCustomers());
-        System.out.println("Customers retrieved from database");
     }
 
+    /**
+     * Load selected customer information into the input fields (for modificiation)
+     * @param selectedCustomer
+     */
     public void loadSelectedCustomer(Customer selectedCustomer) {
+
+        // Find the selected customer and load into input fields
         this.selectedCustomer = selectedCustomer;
         this.nameField.setText(selectedCustomer.getCustomerName());
         this.address1Field.setText(selectedCustomer.getAddress().getAddress());
@@ -175,64 +228,113 @@ public class ManageCustomerScreenController extends AbstractMainController imple
         this.countryField.setText(selectedCustomer.getAddress().getCity().getCountry().getCountry());
     }
 
-    public Country addCountry (String countryName) {
-        System.out.println("addCountry called");
+    /**
+     * Add country to database
+     * @param countryName
+     * @return
+     * @throws SQLException
+     */
+    public Country addCountry (String countryName) throws SQLException {
+
+        // Create country object
         Country country = new Country();
         country.setCountry(countryName);
+
+        // Create access object and add country to the database
         CountryAccess countryAccess = new CountryAccess();
         country.setCountryID(countryAccess.addCountry(country));
         return country;
     }
 
+    /**
+     * Modify country method
+     * @param country
+     */
     public void modifyCountry(Country country) {
+
+        // Check if country was modified before we do anything
         if (!(this.countryField.getText().equals(country.getCountry()))) {
-            System.out.println("Country value changed");
-            // Save to database
+
+            // Create access object and update country table
             CountryAccess countryAccess = new CountryAccess();
             countryAccess.updateCountry(country, this.countryField.getText());
         }
     }
 
-    public City addCity (String cityName, Country country) {
-        System.out.println("addCity called");
+    /**
+     * Add city method
+     * @param cityName
+     * @param country
+     * @return
+     * @throws SQLException
+     */
+    public City addCity (String cityName, Country country) throws SQLException {
+
+        // Create city object
         City city = new City();
         city.setCity(cityName);
         city.setCountry(country);
+
+        // Create access object and add city to the database
         CityAccess cityAccess = new CityAccess();
         int cityID = cityAccess.addCity(city);
         city.setCityID(cityID);
         return city;
     }
 
+    /**
+     * Modify city method
+     * @param city
+     */
     public void modifyCity(City city) {
+
+        // Check if city was modified
         if (!(this.cityField.getText().equals(city.getCity()))) {
-            System.out.println("City value changed");
+
             // Save to database
             CityAccess cityAccess = new CityAccess();
             cityAccess.updateCity(city, this.cityField.getText());
         }
     }
 
-    public Address addAddress (String address1, String address2, String postalCode, String phone, City city) {
-        System.out.println("addAddress called");
+    /**
+     * Add address method
+     * @param address1
+     * @param address2
+     * @param postalCode
+     * @param phone
+     * @param city
+     * @return
+     * @throws SQLException
+     */
+    public Address addAddress (String address1, String address2, String postalCode, String phone, City city) throws SQLException{
+
+        // Create address object
         Address address = new Address();
         address.setAddress(address1);
         address.setAddress2(address2);
         address.setPostalCode(postalCode);
         address.setPhone(phone);
         address.setCity(city);
+
+        // Create access object and add to the database
         AddressAccess addressAccess = new AddressAccess();
         int addressID = addressAccess.addAddress(address);
         address.setAddressID(addressID);
         return address;
     }
 
+    /**
+     * Modify address method
+     * @param address
+     */
     public void modifyAddress(Address address) {
+        // Check if address fields were modified
         if (!(this.address1Field.getText().equals(address.getAddress())) ||
                 !(this.address2Field.getText().equals(address.getAddress2())) ||
                 !(this.postalField.getText().equals(address.getPostalCode())) ||
                 !(this.phoneField.getText().equals(address.getPhone()))) {
-            System.out.println("Address value changed");
+
             // Save to database
             AddressAccess addressAccess = new AddressAccess();
             addressAccess.updateAddress(address,
@@ -244,20 +346,36 @@ public class ManageCustomerScreenController extends AbstractMainController imple
         }
     }
 
-    public Customer addCustomer (String customerName, Address address) {
-        System.out.println("addCustomer Called");
+    /**
+     * Add customer method
+     * @param customerName
+     * @param address
+     * @return
+     * @throws SQLException
+     */
+    public Customer addCustomer (String customerName, Address address) throws SQLException {
+
+        // Create customer object
         Customer customer = new Customer();
         customer.setCustomerName(customerName);
         customer.setAddress(address);
+
+        // Create access object and add customer to the database
         CustomerAccess customerAccess = new CustomerAccess();
         int customerID = customerAccess.addCustomer(customer);
         customer.setCustomerID(customerID);
         return customer;
     }
 
+    /**
+     * Modify customer method
+     * @param customer
+     */
     public void modifyCustomer(Customer customer) {
+
+        // Check if customer information was changed
         if (!(this.nameField.getText().equals(customer.getCustomerName()))) {
-            System.out.println("Customer name value changed");
+
             // Save to database
             CustomerAccess customerAccess = new CustomerAccess();
             customerAccess.updateCustomer(customer, this.nameField.getText());

@@ -12,6 +12,7 @@ import java.time.ZoneOffset;
 
 /**
  * Access object for Reminders
+ * @author Shawn Cheng
  */
 public class ReminderAccess {
 
@@ -30,23 +31,24 @@ public class ReminderAccess {
 
         int reminderId = getReminderId();
         try {
+            System.out.println("Preparing SQL Statement to add reminder");
             PreparedStatement stmt = conn.prepareStatement(query);
-
             // Store the date in UTC time
             ZoneId zone = ZoneId.systemDefault();
             LocalDateTime reminderDate = reminder.getReminderDateTime()
                     .atZone(zone)
                     .withZoneSameInstant(ZoneOffset.UTC)
                     .toLocalDateTime();
-
             // Replace values in the query string
             stmt.setInt(1, reminderId);
             stmt.setTimestamp(2, Timestamp.valueOf(reminderDate));
             stmt.setInt(3, reminder.getAppointment().getAppointmentId());
             stmt.setString(4, MainApp.userName);
             stmt.executeUpdate();
-        } catch(SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
         return reminderId;
     }
@@ -68,13 +70,16 @@ public class ReminderAccess {
      * @param reminder
      */
     public void removeReminder(Reminder reminder) {
+        System.out.println("Preparing SQL Statement to remove reminder");
         String query = "DELETE FROM reminder WHERE reminderId = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, reminder.getReminderId());
             stmt.executeUpdate();
-        } catch(SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
     }
 
@@ -83,6 +88,7 @@ public class ReminderAccess {
      * @param reminder
      */
     public void updateReminder(Reminder reminder) {
+        System.out.println("Preparing SQL Statement to update reminder");
         String updateQuery = "UPDATE reminder SET reminderDate=? WHERE reminderId = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(updateQuery);
@@ -91,12 +97,13 @@ public class ReminderAccess {
                     .atZone(zone)
                     .withZoneSameInstant(ZoneOffset.UTC)
                     .toLocalDateTime();
-
             stmt.setTimestamp(1, Timestamp.valueOf(reminderDate));
             stmt.setInt(2, reminder.getReminderId());
             stmt.executeUpdate();
-        } catch(SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
     }
 
@@ -105,6 +112,7 @@ public class ReminderAccess {
      * @param apptId
      */
     public int getExistingReminderId(int apptId) {
+        System.out.println("Preparing SQL Statement to retrieve reminder ID");
         String query = "SELECT reminderId FROM reminder WHERE appointmentId = ?";
         int fetchedApptId = 0;
         try {
@@ -114,8 +122,10 @@ public class ReminderAccess {
             if (rs.next()) {
                 fetchedApptId = rs.getInt("reminderId");
             }
-        } catch(SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
         return fetchedApptId;
     }
@@ -136,6 +146,7 @@ public class ReminderAccess {
                 "WHERE r.reminderDate BETWEEN ? AND ? AND a.createdBy = ? AND c.active = 1";
 
         try{
+            System.out.println("Preparing SQL Statement to get reminders in time range " + startTime + " to " + endTime);
             PreparedStatement stmt = conn.prepareStatement(query);
             // Convert time to UTC time to store
             ZoneId zone = ZoneId.systemDefault();
@@ -165,8 +176,10 @@ public class ReminderAccess {
                 reminder.setReminderId(rs.getInt("reminderId"));
                 reminders.add(reminder);
             }
-        } catch(SQLException ex){
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
         return reminders;
     }

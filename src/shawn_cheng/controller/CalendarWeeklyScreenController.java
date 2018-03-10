@@ -4,67 +4,48 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.model.Appointment;
-
 import java.net.URL;
-import java.text.DateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
-public class CalendarWeeklyScreenController extends AbstractCalendarController implements Initializable {
+/**
+ * Controller for the Weekly Calendar Screen
+ * @author Shawn Cheng
+ */
+public class CalendarWeeklyScreenController extends AbstractCalendarController {
 
-
+    // Currently selected week
     private LocalDate selectedWeek;
-
-    @FXML
-    private GridPane calendarGrid;
-
-    @FXML
-    private Label dateLabelSunday;
-
-    @FXML
-    private Label dateLabelMonday;
-
-    @FXML
-    private Label dateLabelTuesday;
-
-    @FXML
-    private Label dateLabelWednesday;
-
-    @FXML
-    private Label dateLabelThursday;
-
-    @FXML
-    private Label dateLabelFriday;
-
-    @FXML
-    private Label dateLabelSaturday;
-
-    @FXML
-    private Label weekLabel;
-
-
-    private ObservableList<Appointment> calendarAppointments = FXCollections.observableArrayList();
-
+    // Format LocalDate
     DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+    // Day of week labels
+    @FXML private Label dateLabelSunday;
+    @FXML private Label dateLabelMonday;
+    @FXML private Label dateLabelTuesday;
+    @FXML private Label dateLabelWednesday;
+    @FXML private Label dateLabelThursday;
+    @FXML private Label dateLabelFriday;
+    @FXML private Label dateLabelSaturday;
+    // Label to display date range of week
+    @FXML private Label weekLabel;
 
-
+    /**
+     * Override Initialize
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Get current week
-        // Start with todays date
+        // Get current week, start with today's date
         LocalDate today = LocalDate.now();
         int dayOfWeek = today.getDayOfWeek().getValue();
         // Selected week should be the Sunday of that week
@@ -73,26 +54,32 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
         } else {
             this.selectedWeek = today.minusDays(dayOfWeek);
         }
-
         // Display the calendar
         displayCalendar();
     }
 
-
+    /**
+     * Handler for next week button
+     * @param event
+     */
     @FXML
     void nextWeekHandler(ActionEvent event) {
         selectedWeek = selectedWeek.plusWeeks(1);
         displayCalendar();
     }
 
+    /**
+     * Handler for previous week button
+     * @param event
+     */
     @FXML
     void previousWeekHandler(ActionEvent event) {
         selectedWeek = selectedWeek.minusWeeks(1);
         displayCalendar();
-
     }
+
     /**
-     * Switches to the weekly view of the calendar.
+     * Switches to the monthly view of the calendar.
      * @param event
      */
     @FXML
@@ -101,7 +88,7 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
     }
 
     /**
-     * Displays the month based on the currently selected month.
+     * Displays the week based on the currently selected week.
      */
     public void displayWeekLabel() {
 
@@ -125,10 +112,13 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
      */
     public void displayCalendar() {
 
+        // Display labels for day of week and date range
         displayWeekLabel();
 
+        // Keep track of which calendar user was last viewing
         viewingWeeklyCalendar = true;
 
+        // Clear currently selected appointment
         selectedAppointment = null;
 
         // Clear what's currently on the grid
@@ -145,17 +135,14 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
         LocalDateTime endDatetime = LocalDateTime.of(selectedWeek.plusDays(6), LocalTime.MIDNIGHT);
         AppointmentAccess appointmentAccess = new AppointmentAccess();
         this.calendarAppointments = appointmentAccess.getAppointmentsSubset(startDatetime, endDatetime);
-        System.out.println("looping through appointments");
 
         // Loop through appointments retrieved for the week.
         for (Appointment appt : calendarAppointments) {
-
-            System.out.println("Checking appointment: " + appt.getTitle());
+            // Get appointment start time
             LocalDateTime curApptStartTime = appt.getStartDateTime();
 
             // We can get the column value based on what day of week
             int colIndex = curApptStartTime.getDayOfWeek().getValue() + 1;
-            System.out.println("colIndex is :" + colIndex);
 
             // Perform a loop to get the row value (based on start time of appt)
             int rowIndex = 0;
@@ -169,9 +156,8 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
                 }
                 curTime = curTime.plusMinutes(30);
             }
-            System.out.println("rowIndex is: " + rowIndex);
 
-            // creating a list to populate the listview.
+            // Creating a list to populate the ListView.
             ObservableList<Appointment> currentAppointment = FXCollections.observableArrayList();
             currentAppointment.add(appt);
 
@@ -186,20 +172,19 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
                 ScreenDisplays.displayAppointmentScreen(true);
             }});
 
-            System.out.println("Adding appointment to the weekly calendar");
-
             // Determine how many rows we'll span based on the length of the appointment.
             System.out.println("Start time is: " + appt.getStartDateTime().toLocalTime() + " End time is: " + appt.getEndDateTime().toLocalTime());
             long apptLength = Duration.between(appt.getStartDateTime().toLocalTime(), appt.getEndDateTime().toLocalTime()).toMinutes();
             System.out.println("Appointment length is: " + apptLength);
             int rowSpan = (int) (apptLength/30);
 
+            // Add to the calendar grid.
             calendarGrid.add(currentApptListView, colIndex, rowIndex, 1, rowSpan);
         }
     }
 
     /**
-     * This is so I can apply CSS styling to show grid lines in each cell for the gridpane.
+     * This is to apply CSS styling to show grid lines in each cell for the gridpane.
      */
     private void insertPanes() {
         for (int colValue = 0; colValue <= 7; colValue++ ) {
@@ -211,6 +196,9 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController i
         }
     }
 
+    /**
+     * Populate the time column
+     */
     private void populateTimeLabels() {
         DateTimeFormatter timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
         LocalTime calTimes = LocalTime.of(9, 0);

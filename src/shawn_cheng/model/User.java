@@ -7,17 +7,14 @@ package shawn_cheng.model;
  */
 public class User {
 
+    // Unique ID
     private int userID;
+    // User's username
     private String userName;
+    // User's password
     private String passWord;
+    // 0 for inactive and 1 for active
     private int active;
-
-    /**
-     * Constructor
-     */
-    public User () {
-
-    }
 
     /**
      * Sets userID
@@ -75,6 +72,10 @@ public class User {
         return this.active;
     }
 
+    /**
+     * Validates the user
+     * @return
+     */
     public boolean validateUser () {
         System.out.println("User Name is " + this.userName);
         try {

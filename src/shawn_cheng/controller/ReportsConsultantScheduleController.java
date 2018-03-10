@@ -11,7 +11,6 @@ import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.access.UserAccess;
 import shawn_cheng.model.Appointment;
 import shawn_cheng.model.User;
-
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,26 +25,23 @@ import java.util.ResourceBundle;
  * @author Shawn Cheng
  */
 public class ReportsConsultantScheduleController extends AbstractReportController {
-    @FXML
-    private TableColumn<Appointment, String> columnStartTime;
 
-    @FXML
-    private TableColumn<Appointment, String> columnEndTime;
+    // Table columns
+    @FXML private TableColumn<Appointment, String> columnStartTime;
+    @FXML private TableColumn<Appointment, String> columnEndTime;
+    @FXML private TableColumn<Appointment, String> columnCustomer;
+    @FXML private TableColumn<Appointment, String> columnTitle;
 
-    @FXML
-    private TableColumn<Appointment, String> columnCustomer;
+    // TableView
+    @FXML protected TableView<Appointment> tableView;
 
-    @FXML
-    private TableColumn<Appointment, String> columnTitle;
+    // Drop down
+    @FXML protected ComboBox<User> dropDown;
 
-    @FXML
-    protected TableView<Appointment> tableView;
-
-    @FXML
-    protected ComboBox<User> dropDown;
-
+    // Keep track of selected user
     private User selectedUser;
 
+    // Format of date time
     private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
 
     /**

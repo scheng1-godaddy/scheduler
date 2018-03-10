@@ -7,6 +7,7 @@ import shawn_cheng.model.*;
 
 /**
  * Access object for address information
+ * @author Shawn Cheng
  */
 public class AddressAccess {
 
@@ -21,27 +22,25 @@ public class AddressAccess {
     public Address getAddress(int addressId) {
         String query = "SELECT * FROM address WHERE addressId = ?";
         Address address = new Address();
-
         try{
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, addressId);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()){
                 address.setAddressID(rs.getInt("addressId"));
                 address.setAddress(rs.getString("address"));
                 address.setAddress2(rs.getString("address2"));
                 address.setPostalCode(rs.getString("postalCode"));
                 address.setPhone(rs.getString("phone"));
-
                 CityAccess city = new CityAccess();
                 address.setCity(city.getCity(rs.getInt("cityId")));
-
             } else {
                 return null;
             }
-        } catch(SQLException ex){
-            System.out.println(ex.getMessage());
+        } catch(SQLException e){
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
         return address;
     }
@@ -68,8 +67,10 @@ public class AddressAccess {
             stmt.setString(7, MainApp.userName);
             stmt.setString(8, MainApp.userName);
             stmt.executeUpdate();
-        } catch(SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch(SQLException e) {
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
         return addressID;
     }
@@ -95,8 +96,10 @@ public class AddressAccess {
             stmt.setString(5, MainApp.userName);
             stmt.setInt(6, address.getAddressID());
             stmt.executeUpdate();
-        } catch(SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch(SQLException e) {
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
     }
 

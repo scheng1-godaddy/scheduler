@@ -6,6 +6,7 @@ import shawn_cheng.MainApp;
 
 /**
  * Access object for city information
+ * @author Shawn Cheng
  */
 public class CityAccess {
 
@@ -33,8 +34,10 @@ public class CityAccess {
             } else {
                 return null;
             }
-        } catch(SQLException ex){
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
         return city;
     }
@@ -58,8 +61,10 @@ public class CityAccess {
             stmt.setString(4, MainApp.userName);
             stmt.setString(5, MainApp.userName);
             stmt.executeUpdate();
-        } catch(SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
         return cityID;
     }
@@ -79,8 +84,10 @@ public class CityAccess {
             stmt.setInt(3, city.getCityID());
             System.out.println("Executing the following SQL " + stmt);
             stmt.executeUpdate();
-        } catch(SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
     }
 

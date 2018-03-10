@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
 import shawn_cheng.MainApp;
 import shawn_cheng.access.UserAccess;
@@ -18,23 +17,23 @@ import shawn_cheng.model.User;
  * @author Shawn Cheng
  */
 public class LoginScreenController implements Initializable {
-
+    // Labels and text input fields
     @FXML
     private TextField userNameInput;
-
     @FXML
     private TextField passWordInput;
-
     @FXML
     private Label userNameLabel;
-
     @FXML
     private Label passwordLabel;
-
     @FXML
     private Label mainTitleLabel;
 
-
+    /**
+     * Override for initialize
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) { }
 

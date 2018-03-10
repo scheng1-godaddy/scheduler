@@ -6,6 +6,7 @@ import java.sql.Statement;
 
 /**
  * Holds code that will be used by other Access Objects
+ * @author Shawn Cheng
  */
 public class ShareAccess {
 
@@ -18,6 +19,7 @@ public class ShareAccess {
      */
     static int getId(int id, String query, Statement statement) {
         try {
+            System.out.println("Preparing SQL Statement to retrieve all ID");
             Statement stmt = statement;
             ResultSet result = stmt.executeQuery(query);
 
@@ -25,7 +27,9 @@ public class ShareAccess {
                 id = result.getInt(1);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
         return id;
     }

@@ -1,4 +1,5 @@
 package shawn_cheng.access;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import shawn_cheng.model.User;
@@ -7,6 +8,7 @@ import shawn_cheng.MainApp;
 
 /**
  * User Access Object
+ * @author Shawn Cheng
  */
 public class UserAccess {
 
@@ -27,16 +29,13 @@ public class UserAccess {
             PreparedStatement preparedStatement = conn.prepareStatement(selectUserQuery);
             preparedStatement.setString(1, userName);
             preparedStatement.setString(2, passWord);
-            System.out.println("Running query: " + preparedStatement);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 fetchedUser.setUserName(resultSet.getString("userName"));
                 fetchedUser.setPassWord(resultSet.getString("password"));
                 fetchedUser.setActive(resultSet.getInt("active"));
                 fetchedUser.setUserID(resultSet.getInt("userId"));
-                System.out.println("Found the following user " + fetchedUser.getUserName());
             } else {
-                System.out.println("Didn't find anything, returning null");
                 return null;
             }
         } catch (SQLException e) {
@@ -52,6 +51,7 @@ public class UserAccess {
      * @return
      */
     public ObservableList<User> getAllUsers() {
+        System.out.println("Preparing SQL Statement to retrieve all users");
         ObservableList<User> usersList = FXCollections.observableArrayList();
         String getCustomerQuery = "SELECT * FROM user WHERE active = 1";
         try {
@@ -66,7 +66,9 @@ public class UserAccess {
                 usersList.add(fetchedUser);
             }
         } catch(SQLException e){
-            System.out.println(e.getMessage());
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
         return usersList;
     }

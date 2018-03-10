@@ -8,34 +8,40 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import shawn_cheng.MainApp;
-import shawn_cheng.access.ReminderAccess;
 import shawn_cheng.model.Appointment;
 import shawn_cheng.model.Reminder;
-
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 
+/**
+ * Holds static methods to display various screens.
+ */
 public class ScreenDisplays {
 
+    // Pointer to primary stage
     public static Stage primaryStage;
+
+    // Pointer to the main application
     public static MainApp mainApp;
 
     /**
-     * Load Main Menu screen
+     * Sets primary stage
      * @param stage
      */
-
     public static void setPrimaryStage (Stage stage) {
         primaryStage = stage;
     }
 
+    /**
+     * Sets pointer to main application
+     * @param mainapp
+     */
     public static void setMainApp (MainApp mainapp) {
         mainApp = mainapp;
     }
 
     /**
-     * Load login screen
+     * Display login screen
      */
     public static void displayLogin() {
         try {
@@ -52,6 +58,9 @@ public class ScreenDisplays {
         }
     }
 
+    /**
+     * Display exit confirmation
+     */
     public static void displayExitConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(MainApp.rb.getString("confirm_title"));
@@ -62,6 +71,9 @@ public class ScreenDisplays {
                 .ifPresent(userResponse -> System.exit(0));
     }
 
+    /**
+     * Display manage customer screen
+     */
     public static void displayCustomerScreen() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -77,6 +89,9 @@ public class ScreenDisplays {
         }
     }
 
+    /**
+     * Display monthly calendar screen
+     */
     public static void displayMonthlyCalendarScreen() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -92,6 +107,9 @@ public class ScreenDisplays {
         }
     }
 
+    /**
+     * Display weekly calendar screen
+     */
     public static void displayWeeklyCalendarScreen() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -107,6 +125,10 @@ public class ScreenDisplays {
         }
     }
 
+    /**
+     * Display manage appointment screen
+     * @param modify
+     */
     public static void displayAppointmentScreen(boolean modify) {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -124,6 +146,9 @@ public class ScreenDisplays {
         }
     }
 
+    /**
+     * Display Report screen for Appointment type count per month
+     */
     public static void displayReportApptTypeScreen() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -139,6 +164,9 @@ public class ScreenDisplays {
         }
     }
 
+    /**
+     * Display Report screen for Consultant Schedule
+     */
     public static void displayReportConsultantScheduleScreen() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -154,6 +182,9 @@ public class ScreenDisplays {
         }
     }
 
+    /**
+     * Display Report screen for all past appointments for chosen customer
+     */
     public static void displayReportHistoryPerCustomerScreen() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -169,11 +200,14 @@ public class ScreenDisplays {
         }
     }
 
+    /**
+     * Displays reminder prompt
+     * @param reminder
+     */
     public static void displayReminder(Reminder reminder) {
         Appointment appointment = reminder.getAppointment();
         String apptTitle = appointment.getTitle();
         LocalDateTime apptTime = appointment.getStartDateTime();
-
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
         alert.setTitle("Appointment Reminder");

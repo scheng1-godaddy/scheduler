@@ -6,6 +6,7 @@ import shawn_cheng.MainApp;
 
 /**
  * Access object for the country table
+ * @author Shawn Cheng
  */
 public class CountryAccess {
 
@@ -30,8 +31,10 @@ public class CountryAccess {
             } else {
                 return null;
             }
-        } catch(SQLException ex){
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
         return country;
     }
@@ -54,8 +57,10 @@ public class CountryAccess {
             stmt.setString(3, MainApp.userName);
             stmt.setString(4, MainApp.userName);
             stmt.executeUpdate();
-        } catch(SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
         return countryID;
     }
@@ -73,8 +78,10 @@ public class CountryAccess {
             stmt.setString(2, MainApp.userName);
             stmt.setInt(3, country.getCountryID());
             stmt.executeUpdate();
-        } catch(SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
     }
 

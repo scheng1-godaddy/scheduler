@@ -8,6 +8,7 @@ import shawn_cheng.model.*;
 
 /**
  * Access Object for Customer Table
+ * @author Shawn Cheng
  */
 public class CustomerAccess {
 
@@ -34,8 +35,10 @@ public class CustomerAccess {
                 customer.setAddress(address.getAddress(rs.getInt("addressId")));
                 customers.add(customer);
             }
-        } catch(SQLException ex){
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
         return customers;
     }
@@ -59,8 +62,10 @@ public class CustomerAccess {
                 AddressAccess address = new AddressAccess();
                 customer.setAddress(address.getAddress(rs.getInt("addressId")));
             }
-        } catch(SQLException ex){
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
         return customer;
     }
@@ -85,8 +90,10 @@ public class CustomerAccess {
             stmt.setString(5, MainApp.userName);
             stmt.setString(6, MainApp.userName);
             stmt.executeUpdate();
-        } catch(SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
         return customerID;
     }
@@ -104,8 +111,10 @@ public class CustomerAccess {
             stmt.setString(2, MainApp.userName);
             stmt.setInt(3, customer.getCustomerID());
             stmt.executeUpdate();
-        } catch(SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
     }
 
@@ -120,8 +129,10 @@ public class CustomerAccess {
             stmt.setString(1, MainApp.userName);
             stmt.setInt(2, customer.getCustomerID());
             stmt.executeUpdate();
-        } catch(SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQLException: "+e.getMessage());
+            System.out.println("SQLState: "+e.getSQLState());
+            System.out.println("VendorError: "+e.getErrorCode());
         }
     }
 

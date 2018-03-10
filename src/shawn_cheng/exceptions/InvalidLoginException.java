@@ -1,8 +1,11 @@
 package shawn_cheng.exceptions;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import shawn_cheng.MainApp;
+/**
+ * Exception for invalid login
+ * Might not use
+ *
+ * @author Shawn Cheng
+ */
 
 public class InvalidLoginException extends Exception {
     public InvalidLoginException(String msg) {
