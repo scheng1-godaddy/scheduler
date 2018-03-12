@@ -177,9 +177,11 @@ public class AppointmentAccess {
                 "ON a.customerId = c.customerId " +
                 "WHERE (? > a.start AND ? < a.end) " +
                 "OR (? > a.start AND ? < a.end) " +
-                "OR ? = a.start " +
-                "OR ? = a.end " +
-                "AND c.active = 1 AND a.createdBy=?";
+                "OR (? < a.start AND ? > a.end) " +
+                "OR (? = a.start) " +
+                "OR (? = a.end) " +
+                "AND (c.active = 1) " +
+                "AND (a.createdBy=?)";
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
             //Convert to UTC time first
@@ -192,8 +194,11 @@ public class AppointmentAccess {
             stmt.setTimestamp(4, Timestamp.valueOf(endDatetime));
             stmt.setTimestamp(5, Timestamp.valueOf(startDatetime));
             stmt.setTimestamp(6, Timestamp.valueOf(endDatetime));
-            stmt.setString(7, MainApp.userName);
+            stmt.setTimestamp(7, Timestamp.valueOf(startDatetime));
+            stmt.setTimestamp(8, Timestamp.valueOf(endDatetime));
+            stmt.setString(9, MainApp.userName);
             ResultSet rs = stmt.executeQuery();
+            System.out.println("Query running for overlaps: " + stmt);
             while (rs.next()) {
                 Appointment appt = new Appointment();
                 appt.setAppointmentId(rs.getInt("appointmentId"));

@@ -114,7 +114,7 @@ public class ManageAppointmentController extends AbstractMainController implemen
         }
 
         // Validate the appointment times
-        errorMsg = Appointment.validateTimes(this);
+        errorMsg = Appointment.validateTimes(this, selectedAppointment);
 
         // If any content, then there was an issue with the appointment time
         if (errorMsg.length() > 0) {

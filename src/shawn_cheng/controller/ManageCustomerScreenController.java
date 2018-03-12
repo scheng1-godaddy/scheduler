@@ -69,6 +69,18 @@ public class ManageCustomerScreenController extends AbstractMainController imple
             selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
         });
 
+        // Let user double click to get to modify screen (or just to view details).
+        customerTableView.setRowFactory( tv -> {
+            TableRow<Customer> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    this.selectedCustomer = row.getItem();
+                    loadSelectedCustomer(selectedCustomer);
+                }
+            });
+            return row;
+        });
+
     }
 
     /**

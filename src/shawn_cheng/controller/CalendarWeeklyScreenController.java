@@ -6,9 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import javafx.util.Callback;
 import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.model.Appointment;
 import java.net.URL;
@@ -164,6 +167,33 @@ public class CalendarWeeklyScreenController extends AbstractCalendarController {
             // Create the ListView, this will
             ListView<Appointment> currentApptListView = new ListView<>(currentAppointment);
             currentApptListView.setEditable(false);
+
+            // Custom cell factory so that we can use text object for word wrapping
+            currentApptListView.setCellFactory(new Callback<ListView<Appointment>, ListCell<Appointment>>() {
+
+                @Override
+                public ListCell<Appointment> call(ListView<Appointment> param) {
+                    ListCell<Appointment> cell = new ListCell<Appointment>() {
+                        private Text text;
+                        @Override
+                        protected void updateItem(Appointment appt, boolean empty) {
+                            super.updateItem(appt, empty);
+                            if (appt != null) {
+                                //setText(appt.getTitle());
+                                //setWrapText(true);
+                                text = new Text(appt.getTitle());
+                                text.setWrappingWidth(110);
+                                setGraphic(text);
+                            } else {
+                                setText("");
+                            }
+                        }
+                    };
+                    return cell;
+                }
+            });
+
+
 
             currentApptListView.getSelectionModel().selectedItemProperty()
                     .addListener((obs, oldVal, newVal) -> selectedAppointment = newVal);

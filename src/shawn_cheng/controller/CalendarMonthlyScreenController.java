@@ -7,8 +7,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Text;
+import javafx.util.Callback;
 import shawn_cheng.access.AppointmentAccess;
 import shawn_cheng.model.Appointment;
 import java.net.URL;
@@ -160,6 +163,29 @@ public class CalendarMonthlyScreenController extends AbstractCalendarController 
 
         // Create list view from daily appointments.
         ListView<Appointment> dailyApptListView = new ListView<>(dailyAppointments);
+
+        // Custom cell factory so that we can use text object for word wrapping
+        dailyApptListView.setCellFactory(new Callback<ListView<Appointment>, ListCell<Appointment>>() {
+
+            @Override
+            public ListCell<Appointment> call(ListView<Appointment> param) {
+                ListCell<Appointment> cell = new ListCell<Appointment>() {
+                    private Text text;
+                    @Override
+                    protected void updateItem(Appointment appt, boolean empty) {
+                        super.updateItem(appt, empty);
+                        if (appt != null) {
+                            text = new Text(appt.getTitle());
+                            text.setWrappingWidth(120);
+                            setGraphic(text);
+                        } else {
+                            setText("");
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
 
         // Add listener to detect when user selects appointment in the list view
         dailyApptListView.getSelectionModel().selectedItemProperty()

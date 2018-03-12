@@ -1,5 +1,6 @@
 package shawn_cheng;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,8 +10,10 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.util.logging.SimpleFormatter;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -39,7 +42,9 @@ public class MainApp extends Application {
     // Need a reminder access object to retrieve reminders
     public static ReminderAccess reminderAccess;
     // Logger object
-    private static final Logger logger = Logger.getLogger("SchedulerLog");;
+    public static Logger logger;
+    // File to hold logging information
+    private static FileHandler schedulerLogFile;
 
     /**
      * Resolves locale
@@ -48,7 +53,7 @@ public class MainApp extends Application {
         // Get the default locale
         this.locale = Locale.getDefault();
         // To test locale of another country uncomment line below
-        // this.locale = new Locale("es", "MX");
+        //this.locale = new Locale("es", "MX");
         System.out.println("Locale is: " +locale);
 
         // Resource bundle
@@ -100,6 +105,24 @@ public class MainApp extends Application {
         ScreenDisplays.displayLogin();
     }
 
+
+    /**
+     * Open or create a logger.
+     */
+    private static void setupLogging() {
+        try {
+            logger = Logger.getLogger("SchedulerLog");
+            logger.setLevel(Level.INFO);
+            schedulerLogFile = new FileHandler("scheduler-log.txt", true);
+            SimpleFormatter simpleFormatter = new SimpleFormatter();
+            schedulerLogFile.setFormatter(simpleFormatter);
+            logger.addHandler(schedulerLogFile);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * Main method, used to launch the application
      * @param args args
@@ -113,6 +136,9 @@ public class MainApp extends Application {
 
         // Create reference to executor service
         ScheduledExecutorService reminderCheckService = null;
+
+        // Setup logging
+        setupLogging();
 
         // Need to run reminder in this try block because the finally block will stop the thread after Application object ends
         try {

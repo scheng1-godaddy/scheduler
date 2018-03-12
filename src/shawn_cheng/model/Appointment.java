@@ -218,7 +218,7 @@ public class Appointment {
      * @param controller
      * @return
      */
-    public static String validateTimes(ManageAppointmentController controller) {
+    public static String validateTimes(ManageAppointmentController controller, Appointment selectedAppointment) {
         System.out.println("Validating appointment times");
         String errorMsg = "";
         LocalDate selectedDate = controller.dateField.getValue();
@@ -248,7 +248,35 @@ public class Appointment {
         AppointmentAccess appointmentAccess = new AppointmentAccess();
         ObservableList<Appointment> appointments = appointmentAccess.getAppointmentOverlaps(selectedStartDateTime, selectedEndDateTime);
         if (!appointments.isEmpty()) {
-            errorMsg += "There is overlapping appointments, choose another time";
+            System.out.println("Overlap check: there was a return from db query");
+            // Not empty, lets check if the overlapping appointment is actually the same appointment (from a modify)
+            if (selectedAppointment != null) {
+                System.out.println("Overlap check: selected appointment was not null");
+                // This will keep track existing appointment was found in the returned results
+                boolean existingAppt = false;
+
+                // Cycle through the results
+                System.out.println("Overlap check: query returned " + appointments.size() + " results");
+                for (Appointment fetchedAppt : appointments) {
+
+                    // Check if the currently selected appointment is the same as one of the overlaps
+                    if (fetchedAppt.getAppointmentId() == selectedAppointment.getAppointmentId() && appointments.size() == 1) {
+                        System.out.println("Overlap check: found an existing appointment");
+                        // It is the same
+                        existingAppt = true;
+                    }
+                }
+
+                // If the overlaps didn't covntain the existing appointment, then there was a genuine overlap issue
+                if (!existingAppt) {
+                    System.out.println("Overlap check: ");
+                    errorMsg += "There is overlapping appointments, choose another time";
+                }
+
+            } else {
+                // Selected appointment was null, so there was a genuine overlap issue
+                errorMsg += "There is overlapping appointments, choose another time";
+            }
         }
         return errorMsg;
     }

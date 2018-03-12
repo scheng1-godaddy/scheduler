@@ -35,7 +35,9 @@ public class LoginScreenController implements Initializable {
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) { }
+    public void initialize(URL url, ResourceBundle rb) {
+        setText();
+    }
 
 
     public void setText() {
@@ -61,10 +63,15 @@ public class LoginScreenController implements Initializable {
             if (newUser.validateUser()) {
                 System.out.println("Input validated, checking against database");
                 UserAccess userAccess = new UserAccess();
-                if (userAccess.login(userName, password) != null) {
+                User loggedInUser;
+                loggedInUser = userAccess.login(userName, password);
+                if (loggedInUser != null) {
                     System.out.println("Logged in");
+                    // Log to logger
+                    MainApp.logger.info("User: " + userName + " successfully logged in. ");
                     ScreenDisplays.displayMonthlyCalendarScreen();
                 } else {
+                    MainApp.logger.info("Unsuccessful login from user: " + userName);
                     throw new InvalidLoginException("");
                 }
             } else {
