@@ -1,3 +1,9 @@
 # scheduler
 
-This is for learning purposes for a beginner java developer. Goal is create a scheduling application where user can create appointments and view them in a calendar format. It also lets user create a group of customers and link those customers to appointment entries. 
+A desktop scheduling application built with Java 1.8 and Java FX. 
+
+Application allows users to create clients and schedule appointments. There's error handling for overlapping appointments and appointments outside of business hours. 
+
+Purpose was to utilize new 1.8 features like lambdas and streams. 
+
+
